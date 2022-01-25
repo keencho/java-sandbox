@@ -1,0 +1,44 @@
+server:
+  port: 8081
+
+#logging:
+#  pattern:
+#    console: "%d{HH:mm:ss.SSS} %highlight([%-5level])[%logger.%method:line%line] - %msg%n"
+#logging:
+#  level:
+#    org.springframework.orm.jpa: DEBUG
+#    org.springframework.transaction: DEBUG
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:../test
+    username: sa
+    password:
+  jpa:
+#    open-in-view: false
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      javax:
+        persistence:
+          sharedCache:
+            mode: ALL
+      hibernate:
+        cache:
+          use_second_level_cache: true
+          region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+
+#spring:
+#  datasource:
+#    url: jdbc:postgresql://localhost/basic
+#    username: postgres
+#    password: "123qwe@@"
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#    open-in-view: false
