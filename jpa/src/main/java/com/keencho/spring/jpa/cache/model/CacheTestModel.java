@@ -1,4 +1,4 @@
-package com.keencho.spring.jpa.model;
+package com.keencho.spring.jpa.cache.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

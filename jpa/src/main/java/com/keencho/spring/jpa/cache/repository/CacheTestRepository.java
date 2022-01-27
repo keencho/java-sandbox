@@ -1,6 +1,6 @@
-package com.keencho.spring.jpa.repo;
+package com.keencho.spring.jpa.cache.repository;
 
-import com.keencho.spring.jpa.model.CacheTestModel;
+import com.keencho.spring.jpa.cache.model.CacheTestModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

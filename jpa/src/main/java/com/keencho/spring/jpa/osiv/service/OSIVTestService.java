@@ -1,11 +1,11 @@
-package com.keencho.spring.jpa.service;
+package com.keencho.spring.jpa.osiv.service;
 
-import com.keencho.spring.jpa.model.OSIVChildrenTestModel;
-import com.keencho.spring.jpa.model.OSIVParentTestModel;
+import com.keencho.spring.jpa.osiv.model.OSIVChildrenTestModel;
+import com.keencho.spring.jpa.osiv.model.OSIVParentTestModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.keencho.spring.jpa.repo.OSIVChildrenTestRepository;
-import com.keencho.spring.jpa.repo.OSIVParentTestRepository;
+import com.keencho.spring.jpa.osiv.repository.OSIVChildrenTestRepository;
+import com.keencho.spring.jpa.osiv.repository.OSIVParentTestRepository;
 
 import javax.transaction.Transactional;
 

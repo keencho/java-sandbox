@@ -1,4 +1,4 @@
-package com.keencho.spring.jpa.controller;
+package com.keencho.spring.jpa.cache.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.keencho.spring.jpa.repo.CacheTestRepository;
-import com.keencho.spring.jpa.service.CacheTestService;
+import com.keencho.spring.jpa.cache.repository.CacheTestRepository;
+import com.keencho.spring.jpa.cache.service.CacheTestService;
 
 @RestController
 @RequestMapping("/cache")

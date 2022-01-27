@@ -1,11 +1,11 @@
-package com.keencho.spring.jpa.service;
+package com.keencho.spring.jpa.cache.service;
 
-import com.keencho.spring.jpa.model.CacheTestModel;
+import com.keencho.spring.jpa.cache.model.CacheTestModel;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.keencho.spring.jpa.repo.CacheTestRepository;
+import com.keencho.spring.jpa.cache.repository.CacheTestRepository;
 
 import java.util.Arrays;
 import java.util.Random;
