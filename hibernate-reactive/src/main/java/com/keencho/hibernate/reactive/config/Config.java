@@ -9,13 +9,20 @@ import org.springframework.context.annotation.Configuration;
 import javax.persistence.Persistence;
 
 @Configuration
-public class BeanCollection {
+public class Config {
 
     @Bean
-    public KcReactiveRepository genericRepository() {
+    public Mutiny.SessionFactory sessionFactory() {
+        return Persistence
+                .createEntityManagerFactory("pu")
+                .unwrap(Mutiny.SessionFactory.class);
+    }
+
+    @Bean
+    public KcReactiveRepository kcReactiveRepository() {
         return new KcReactiveRepositoryImpl(
                 Persistence
-                        .createEntityManagerFactory("test")
+                        .createEntityManagerFactory("pu")
                         .unwrap(Mutiny.SessionFactory.class)
         );
     }

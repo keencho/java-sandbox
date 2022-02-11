@@ -2,9 +2,10 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
              version="2.2">
-    <persistence-unit name="test">
+    <persistence-unit name="pu">
         <provider>org.hibernate.reactive.provider.ReactivePersistenceProvider</provider>
         <class>com.keencho.hibernate.reactive.model.Post</class>
+        <class>com.keencho.hibernate.reactive.model.Author</class>
 
         <properties>
 
@@ -24,7 +25,7 @@
 
             <!-- Automatic schema export -->
             <property name="javax.persistence.schema-generation.database.action"
-                      value="update"/>
+                      value="create-drop"/>
 
             <!-- SQL statement logging -->
             <property name="hibernate.show_sql" value="true"/>

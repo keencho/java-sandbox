@@ -9,35 +9,33 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class PostRepository {
+public class AuthorRepository {
 
     @Autowired
     KcReactiveRepository kcReactiveRepository;
 
-    public Uni<Post> save(String title, String contents, Author author) {
-        Post entity = Post.builder()
-                .title(title)
-                .contents(contents)
-                .author(author)
+    public Uni<Author> save(String name) {
+        Author entity = Author.builder()
+                .name(name)
                 .build();
 
         return kcReactiveRepository.save(entity);
     }
 
-    public Uni<List<Post>> listAll() {
-        return kcReactiveRepository.listAll(Post.class);
+    public Uni<List<Author>> listAll() {
+        return kcReactiveRepository.listAll(Author.class);
     }
 
-    public Uni<Post> findById(Long id) {
-        return kcReactiveRepository.findById(Post.class, id);
+    public Uni<Author> findById(Long id) {
+        return kcReactiveRepository.findById(Author.class, id);
     }
 
     public Uni<Integer> deleteAll() {
-        return kcReactiveRepository.deleteAll(Post.class);
+        return kcReactiveRepository.deleteAll(Author.class);
     }
 
     public Uni<Integer> deleteById(Long id) {
-        return kcReactiveRepository.deleteById(Post.class, id);
+        return kcReactiveRepository.deleteById(Author.class, id);
     }
 
 }

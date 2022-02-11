@@ -8,21 +8,15 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "post")
+@Table(name = "author")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post {
-
+public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    private String title;
-
-    private String contents;
-
-    @ManyToOne(targetEntity = Author.class)
-    private Author author;
+    private String name;
 }

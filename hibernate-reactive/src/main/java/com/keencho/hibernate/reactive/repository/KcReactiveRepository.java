@@ -11,4 +11,8 @@ public interface KcReactiveRepository {
     <E> Uni<List<E>> listAll(Class<E> clazz);
 
     <E> Uni<E> findById(Class<E> clazz, Object id);
+
+    <E> Uni<Integer> deleteById(Class<E> clazz, Object id);
+
+    <E> Uni<Integer> deleteAll(Class<E> clazz);
 }
