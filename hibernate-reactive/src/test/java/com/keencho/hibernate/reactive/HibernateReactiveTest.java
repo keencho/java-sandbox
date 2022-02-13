@@ -49,6 +49,7 @@ class HibernateReactiveTest {
 
         Assert.isTrue(authorList.size() == 1, "size of author list must be 1");
         Assert.isTrue(postList.size() == 10, "size of post list must be 10");
+        Assert.isTrue(postList.stream().allMatch(post -> post.getAuthor().getName().equals("홍길동")), "author of all post should be 홍길동");
 
         long authorId = authorList.stream().findFirst().get().getId();
         long postId = postList.stream().findAny().get().getId();
