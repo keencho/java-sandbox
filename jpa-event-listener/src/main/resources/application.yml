@@ -2,6 +2,8 @@ server:
   port: 8081
 
 spring:
+#  main:
+#    allow-circular-references: true
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:../test
@@ -11,3 +13,13 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create-drop
+
+keencho:
+  p6spy:
+    start_package: com.keencho.spring.jpa
+    limit_stack_trace: 10
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false
