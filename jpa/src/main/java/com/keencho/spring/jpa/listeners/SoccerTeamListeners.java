@@ -9,10 +9,9 @@ import org.springframework.stereotype.Component;
 import javax.persistence.PrePersist;
 
 @Component
-public class SoccerTeamListeners{
+public class SoccerTeamListeners implements SimpleEventListeners {
 
-    @Autowired
-    SoccerTeamRepository soccerTeamRepository;
+    private static SoccerTeamRepository soccerTeamRepository;
 
     @PrePersist
     public void prePersist(SoccerTeam soccerTeam) {
