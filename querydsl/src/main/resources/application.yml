@@ -1,0 +1,22 @@
+server:
+  port: 8083
+
+logging:
+  level:
+    org.springframework.transaction: DEBUG
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:../test
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false

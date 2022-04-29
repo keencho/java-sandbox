@@ -2,7 +2,6 @@ package sycho.spring.basic.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,9 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import sycho.spring.basic.service.SpringService;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/async-test")
