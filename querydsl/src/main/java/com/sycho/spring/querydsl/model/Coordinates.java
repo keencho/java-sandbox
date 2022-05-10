@@ -1,6 +1,6 @@
 package com.sycho.spring.querydsl.model;
 
-import jakarta.persistence.Embeddable;
+import javax.persistence.Embeddable;
 
 @Embeddable
 public class Coordinates {
