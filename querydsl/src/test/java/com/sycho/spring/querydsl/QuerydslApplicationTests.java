@@ -8,6 +8,7 @@ class QuerydslApplicationTests {
 
     @Test
     void contextLoads() {
+        System.out.println("dma.");
     }
 
 }

@@ -3,8 +3,11 @@ package com.sycho.spring.querydsl.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,19 +20,13 @@ public class MainOrder {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String fromName;
-    private String fromPhoneNumber;
-    private String fromAddress;
-    @Embedded
-    private Coordinates fromCoordinates;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Rider fromRider;
+    private LocalDate orderDate = LocalDate.now();
 
-    private String toName;
-    private String toPhoneNumber;
-    private String toAddress;
-    @Embedded
-    private Coordinates toCoordinates;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Rider toRider;
+    @OneToMany(mappedBy = "mainOrder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Where(clause = "active = true")
+    private List<SubOrder> activeSubOrderList;
+
+    @OneToMany(mappedBy = "mainOrder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Where(clause = "active = false")
+    private List<SubOrder> deActivatedSubOrderList;
 }
