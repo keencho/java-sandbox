@@ -17,6 +17,11 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+test {
+    useJUnitPlatform()
 }
 
 dependencies {
@@ -25,8 +30,11 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'com.h2database:h2:1.4.200'
+    implementation 'com.github.javafaker:javafaker:1.0.2'
+    implementation 'com.github.keencho:lib-custom-p6spy:1.0.1'
 
     implementation 'com.querydsl:querydsl-core:5.0.0'
+    implementation 'com.querydsl:querydsl-jpa:5.0.0'
     annotationProcessor(
             'com.querydsl:querydsl-apt:5.0.0',
             'com.querydsl:querydsl-jpa:5.0.0',

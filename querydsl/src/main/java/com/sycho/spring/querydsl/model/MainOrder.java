@@ -3,6 +3,7 @@ package com.sycho.spring.querydsl.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = {"activeSubOrderList", "deActivatedSubOrderList", "fromNameLikeCList"})
 @Table(name = "main_order")
 public class MainOrder {
 
@@ -29,4 +31,9 @@ public class MainOrder {
     @OneToMany(mappedBy = "mainOrder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Where(clause = "active = false")
     private List<SubOrder> deActivatedSubOrderList;
+
+    @OneToMany(mappedBy = "mainOrder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Where(clause = "from_name LIKE 'C%'")
+    private List<SubOrder> fromNameLikeCList;
+
 }

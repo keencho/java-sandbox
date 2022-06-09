@@ -25,13 +25,13 @@ public class SubOrder {
     private String toPhoneNumber;
     private String toAddress;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    private Rider fromRider;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    private Rider toRider;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn
+//    private Rider fromRider;
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn
+//    private Rider toRider;
 
     @ManyToOne(optional = false)
     private MainOrder mainOrder;
