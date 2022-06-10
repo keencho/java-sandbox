@@ -33,7 +33,7 @@ public class MainOrder {
     private List<SubOrder> deActivatedSubOrderList;
 
     @OneToMany(mappedBy = "mainOrder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Where(clause = "from_name LIKE 'C%'")
+    @Where(clause = "LOWER(from_name) LIKE 'c%'")
     private List<SubOrder> fromNameLikeCList;
 
 }

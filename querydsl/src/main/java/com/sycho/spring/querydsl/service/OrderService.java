@@ -25,8 +25,7 @@ public class OrderService {
 
     @PostConstruct
     public void initData() {
-
-        List<MainOrder> mainOrderList = new ArrayList<>();
+        var mainOrderList = new ArrayList<MainOrder>();
 
         for (int i = 0; i < 5; i ++) {
             var mainOrder = new MainOrder();
