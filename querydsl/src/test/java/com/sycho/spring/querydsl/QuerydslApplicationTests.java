@@ -18,7 +18,6 @@ import java.util.List;
 
 @SpringBootTest
 class QuerydslApplicationTests {
-
     @Autowired
     MainOrderRepository mainOrderRepository;
 
@@ -60,6 +59,15 @@ class QuerydslApplicationTests {
                 .fetch();
 
         Assert.isTrue(subQueryFetch.size() == whereAnnotationFetch.size(), "test failed");
+    }
+
+    @Test
+    @Transactional
+    void whereAnnotationTest3() {
+
+        var list = subOrderRepository.findAll();
+
+        System.out.printf("list");
     }
 
 }
