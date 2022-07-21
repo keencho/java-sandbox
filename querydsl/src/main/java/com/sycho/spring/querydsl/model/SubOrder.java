@@ -3,6 +3,7 @@ package com.sycho.spring.querydsl.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 
@@ -29,5 +30,11 @@ public class SubOrder {
     private MainOrder mainOrder;
 
     private boolean active;
+
+    private int itemCount;
+    private int itemPrice;
+
+    @Formula("item_count * item_price")
+    private int totalPrice;
 
 }

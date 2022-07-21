@@ -44,6 +44,9 @@ public class OrderService {
             subOrder.setToPhoneNumber(JavaFakerGenerator.getPhoneNumber());
             subOrder.setToAddress(JavaFakerGenerator.getAddress());
 
+            subOrder.setItemCount(i % 5);
+            subOrder.setItemPrice(30000);
+
             subOrder.setMainOrder(mainOrderList.get(i % 5));
             subOrderRepository.save(subOrder);
         }
