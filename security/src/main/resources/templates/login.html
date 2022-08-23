@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+
+<style>
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .container {
+        border: 1px solid #000;
+        border-radius: 20px;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .container > div {
+        width: 100%;
+        display: flex;
+    }
+
+    .container > div > input {
+        margin-left: auto;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <h1>로그인</h1>
+        <div>
+            ID: <input type="text" id="id">
+        </div>
+        <div>
+            PW: <input type="text" id="pw">
+        </div>
+        <br />
+        <button id="btnLogin">Login</button>
+    </div>
+</body>
+<script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function (){
+
+        $('#btnLogin').on('click', function() {
+            const id = $('#id').val();
+            const pw = $('#pw').val();
+
+            const params = JSON.stringify({
+                id: id,
+                pw: pw
+            });
+
+            $.ajax('/api/login',{
+                dataType: 'json',
+                data: params,
+                method: 'POST',
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            })
+        })
+    });
+</script>
+</html>
