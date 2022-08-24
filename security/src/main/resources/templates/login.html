@@ -68,8 +68,9 @@
 
             $.ajax('/api/login',{
                 dataType: 'json',
+                contentType: 'application/json',
+                type: 'POST',
                 data: params,
-                method: 'POST',
                 success: function(data) {
                     console.log(data);
                 },
