@@ -5,7 +5,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public interface LoginService<LOGIN_DATA> {
+public interface LoginService<ACCOUNT, USER, LOGIN_DATA> {
 
     LOGIN_DATA login(HttpServletRequest request, HttpServletResponse response, UsernamePasswordAuthenticationToken token, boolean rememberMe);
 
