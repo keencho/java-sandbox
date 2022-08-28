@@ -2,6 +2,7 @@ package com.sycho.security.core.service;
 
 import com.sycho.security.core.manager.AuthenticationProviderManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +32,8 @@ public abstract class LoginServiceImpl<ACCOUNT, USER, LOGIN_DATA> implements Log
             authentication = authenticationProvider.authenticate(token);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (BadCredentialsException ex) {
+            // TODO: 로그인 횟수 검증 / db 업데이트
         } catch (LockedException ex) {
 
         } catch (DisabledException ex) {
@@ -45,6 +48,12 @@ public abstract class LoginServiceImpl<ACCOUNT, USER, LOGIN_DATA> implements Log
 
     @Override
     public LOGIN_DATA reload() {
+        var currentAuth = SecurityContextHolder.getContext().getAuthentication();
+
+        var newAuth = new UsernamePasswordAuthenticationToken(defaultUserDetailsService.loadUserByUsername(currentAuth.getName()), null, currentAuth.getAuthorities());
+
+        var securityUser = newAuth.getPrincipal();
+
         return null;
     }
 }
