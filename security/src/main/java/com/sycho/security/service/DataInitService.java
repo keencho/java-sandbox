@@ -29,11 +29,11 @@ public class DataInitService {
             var id = String.valueOf(i);
             var pw = passwordEncoder.encode(String.valueOf(i));
             adminAccount.setLoginId(id);
-            adminAccount.setLoginPw(pw);
+            adminAccount.setPassword(pw);
 
             var userAccount = new UserAccount();
             userAccount.setLoginId(id);
-            userAccount.setLoginPw(pw);
+            userAccount.setPassword(pw);
 
             adminAccountRepository.save(adminAccount);
             userAccountRepository.save(userAccount);

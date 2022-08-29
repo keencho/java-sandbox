@@ -19,6 +19,9 @@ repositories {
 }
 
 dependencies {
+
+    implementation project(path: ':lib-spring-security', configuration: 'default')
+
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'

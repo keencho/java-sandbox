@@ -1,6 +1,11 @@
 package com.sycho.security.controller;
 
+import com.keencho.lib.spring.security.service.KcLoginService;
+import com.sycho.security.model.AdminAccount;
+import com.sycho.security.model.LoginAccountData;
+import com.sycho.security.repository.AdminAccountRepository;
 import com.sycho.security.repository.UserAccountRepository;
+import com.sycho.security.service.AdminLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +18,12 @@ public class ApiController {
     @Autowired
     UserAccountRepository repository;
 
+    @Autowired
+    KcLoginService<AdminAccount, AdminAccountRepository, Long, LoginAccountData> adminLoginService;
+
+    @Autowired
+    AdminLoginService adminLoginService2;
+
     @PostMapping("/login")
     public void login(
             @RequestBody Map<String, String> map
@@ -20,9 +31,6 @@ public class ApiController {
         var id = map.get("id");
         var pw = map.get("pw");
 
-        if (!(id.equals("1") && pw.equals("1"))) {
-            throw new RuntimeException("Not Matched");
-        }
-        System.out.println(map);
+        adminLoginService2.login(id, pw);
     }
 }
