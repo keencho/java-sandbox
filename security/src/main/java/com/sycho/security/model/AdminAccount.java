@@ -21,20 +21,4 @@ public class AdminAccount extends KcAccountBaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    //////////////////////////////////////////////////////////////////////
-
-    @Override
-    public Collection<? extends GrantedAuthority> authorities() {
-        var set = new HashSet<String>();
-        set.add(AccountRoleCode.ROLE_COMMON);
-        set.add(AccountRoleCode.ROLE_ADMIN);
-
-        return set.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-    }
-
-    @Override
-    public int maxLoginAttemptCount() {
-        return 10;
-    }
 }

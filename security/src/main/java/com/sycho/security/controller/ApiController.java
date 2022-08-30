@@ -5,9 +5,11 @@ import com.sycho.security.model.AdminAccount;
 import com.sycho.security.model.LoginAccountData;
 import com.sycho.security.repository.AdminAccountRepository;
 import com.sycho.security.repository.UserAccountRepository;
-import com.sycho.security.service.AdminLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
@@ -21,9 +23,6 @@ public class ApiController {
     @Autowired
     KcLoginService<AdminAccount, AdminAccountRepository, Long, LoginAccountData> adminLoginService;
 
-    @Autowired
-    AdminLoginService adminLoginService2;
-
     @PostMapping("/login")
     public LoginAccountData login(
             @RequestBody Map<String, String> map
@@ -31,6 +30,6 @@ public class ApiController {
         var id = map.get("id");
         var pw = map.get("pw");
 
-        return adminLoginService2.login(id, pw);
+        return adminLoginService.login(id, pw);
     }
 }
