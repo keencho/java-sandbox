@@ -22,9 +22,9 @@ import java.util.Map;
 public class ApiController {
 
     @Autowired
-    List<KcLoginService<? extends KcAccountBaseModel, ? extends KcAccountRepository, ?, LoginAccountData>> kcLoginService;
+    List<KcLoginService<? extends KcAccountBaseModel, ? extends KcAccountRepository, ?, ?>> kcLoginService;
 
-    Map<Class<? extends KcAccountBaseModel>, KcLoginService<? extends KcAccountBaseModel, ? extends KcAccountRepository, ?, LoginAccountData>> loginServiceMap;
+    Map<Class<? extends KcAccountBaseModel>, KcLoginService<? extends KcAccountBaseModel, ? extends KcAccountRepository, ?, ?>> loginServiceMap;
 
     @PostConstruct
     public void initMap() {
@@ -42,7 +42,7 @@ public class ApiController {
     UserAccountRepository userAccountRepository;
 
     @PostMapping("/login")
-    public LoginAccountData login(
+    public Object login(
             @RequestBody Map<String, String> map,
             @RequestParam String type
     ) {

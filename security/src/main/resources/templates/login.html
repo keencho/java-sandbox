@@ -179,7 +179,8 @@
                     console.log(data);
                 },
                 error: function(err) {
-                    alert(err.responseJSON.message);
+                    console.log(err);
+                    // alert(err.responseJSON.message);
                 },
                 complete: function() {
                     drawAccountList();

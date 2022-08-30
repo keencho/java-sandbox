@@ -1,9 +1,7 @@
 package com.sycho.security.config;
 
 import com.keencho.lib.spring.common.config.KcGlobalExceptionHandler;
-import com.keencho.lib.spring.security.provider.KcAuthenticationProviderManager;
-import com.keencho.lib.spring.security.provider.KcAuthenticationProviderManagerImpl;
-import com.keencho.lib.spring.security.provider.KcUserDetailsAuthenticationProvider;
+import com.keencho.lib.spring.security.provider.*;
 import com.sycho.security.manager.AdminLoginManager;
 import com.sycho.security.manager.UserLoginManager;
 import com.sycho.security.model.AdminAccount;
@@ -19,6 +17,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 @Configuration
 @ConditionalOnMissingBean(annotation = ControllerAdvice.class)
 public class SecurityBeanContainer {
+
+    private static final String JWT_SECRET_KEY = "erklj3d12313";
 
     @Autowired
     AdminAccountRepository adminAccountRepository;
@@ -54,5 +54,15 @@ public class SecurityBeanContainer {
         );
 
         return authenticationProviderManager;
+    }
+
+    @Bean("adminJwtTokenProvider")
+    public KcJwtTokenProvider adminJwtTokenProvider() {
+        return new KcDefaultJwtTokenProvider(JWT_SECRET_KEY, this.adminAccountLoginManager) {
+            @Override
+            public int expireDays() {
+                return 30;
+            }
+        };
     }
 }
