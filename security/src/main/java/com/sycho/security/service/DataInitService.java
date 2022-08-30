@@ -24,7 +24,7 @@ public class DataInitService {
 
     @PostConstruct
     public void init() {
-        for (var i = 1; i < 10; i ++) {
+        for (var i = 1; i < 4; i ++) {
             var adminAccount = new AdminAccount();
             var id = String.valueOf(i);
             var pw = passwordEncoder.encode(String.valueOf(i));

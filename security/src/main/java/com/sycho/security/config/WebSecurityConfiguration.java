@@ -29,7 +29,7 @@ public class WebSecurityConfiguration {
         http
                 .antMatcher("/**").authorizeRequests()
                 //
-                .antMatchers("/web/login", "/api/login").permitAll()
+                .antMatchers("/web/login", "/api/login", "/api/list/account").permitAll()
                 //
                 .anyRequest().authenticated();
 
