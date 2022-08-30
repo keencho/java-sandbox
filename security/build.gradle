@@ -20,7 +20,7 @@ repositories {
 
 dependencies {
 
-    implementation project(path: ':lib-spring-security', configuration: 'default')
+    implementation project(path: ':lib-spring', configuration: 'default')
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'

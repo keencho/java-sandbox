@@ -1,5 +1,6 @@
 package com.sycho.security.config;
 
+import com.keencho.lib.spring.security.config.KcWebSecurityExceptionHandling;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,9 +17,11 @@ public class WebSecurityConfiguration {
 
         // POST 요청 오픈
         http.csrf().disable();
+        http.headers().frameOptions().disable();
+        http.httpBasic().disable();
 
         // 에러 발생할 경우 미리 정의해둔 exception 메시지 & 코드 리턴
-        http.exceptionHandling().authenticationEntryPoint(new WebSecurityExceptionHandling());
+        http.exceptionHandling().authenticationEntryPoint(new KcWebSecurityExceptionHandling());
 
         // 세션 사용하지 않음
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -25,12 +25,12 @@ public class ApiController {
     AdminLoginService adminLoginService2;
 
     @PostMapping("/login")
-    public void login(
+    public LoginAccountData login(
             @RequestBody Map<String, String> map
     ) {
         var id = map.get("id");
         var pw = map.get("pw");
 
-        adminLoginService2.login(id, pw);
+        return adminLoginService2.login(id, pw);
     }
 }

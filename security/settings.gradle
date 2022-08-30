@@ -1,4 +1,4 @@
 rootProject.name = 'security'
 
-include 'lib-spring-security'
-project(':lib-spring-security').projectDir = new File('../lib-spring-security/')
+include 'lib-spring'
+project(':lib-spring').projectDir = new File('../lib-spring-security/')
