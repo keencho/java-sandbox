@@ -5,7 +5,9 @@ import com.keencho.lib.spring.security.provider.KcAuthenticationProviderManager;
 import com.keencho.lib.spring.security.provider.KcAuthenticationProviderManagerImpl;
 import com.keencho.lib.spring.security.provider.KcUserDetailsAuthenticationProvider;
 import com.sycho.security.manager.AdminLoginManager;
+import com.sycho.security.manager.UserLoginManager;
 import com.sycho.security.model.AdminAccount;
+import com.sycho.security.model.UserAccount;
 import com.sycho.security.repository.AdminAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -23,6 +25,9 @@ public class SecurityBeanContainer {
 
     @Autowired
     AdminLoginManager adminAccountLoginManager;
+
+    @Autowired
+    UserLoginManager userLoginManager;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -43,6 +48,10 @@ public class SecurityBeanContainer {
                 new KcUserDetailsAuthenticationProvider(this.bCryptPasswordEncoder(), this.adminAccountLoginManager)
         );
 
+        authenticationProviderManager.addAuthenticationProvider(
+                UserAccount.class,
+                new KcUserDetailsAuthenticationProvider(this.bCryptPasswordEncoder(), this.userLoginManager)
+        );
 
         return authenticationProviderManager;
     }

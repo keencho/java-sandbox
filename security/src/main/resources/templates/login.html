@@ -87,6 +87,12 @@
         <div>
             PW: <input type="text" id="pw">
         </div>
+        <div>
+            <select id="type">
+                <option value="admin">관리자</option>
+                <option value="user">사용자</option>
+            </select>
+        </div>
         <br />
         <button id="btnLogin">Login</button>
     </div>
@@ -145,7 +151,7 @@
                 drawTable(data.user, '사용자');
             }
 
-            $.ajax('/api/list/account', {
+            $.ajax(`/api/list/account`, {
                 dataType: 'json',
                 contentType: 'application/json',
                 type: 'GET',
@@ -164,7 +170,7 @@
                 pw: pw
             });
 
-            $.ajax('/api/login',{
+            $.ajax(`/api/login?type=${$('#type').val()}`,{
                 dataType: 'json',
                 contentType: 'application/json',
                 type: 'POST',
