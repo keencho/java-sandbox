@@ -16,11 +16,13 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
 
     implementation project(path: ':lib-spring', configuration: 'default')
+    implementation 'com.github.keencho:lib-custom-p6spy:1.0.1'
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'

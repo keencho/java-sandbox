@@ -63,7 +63,7 @@ public class AdminLoginManager extends KcDefaultLoginManager<AdminAccount, Admin
         loginData.setLoginAccountType(LoginAccountType.ADMIN);
         loginData.setAuthorities(authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet()));
 
-        return new KcSecurityAccount<>(
+        return new KcSecurityAccount(
                 account.getLoginId(), account.getPassword(), new HashSet<>(authorities),
                 account.isAccountNonExpired(), account.isAccountNonLocked(), account.isCredentialsNonExpired(), account.isEnabled(),
                 loginData

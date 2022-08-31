@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,9 +23,9 @@ import java.util.Map;
 public class ApiController {
 
     @Autowired
-    List<KcLoginService<? extends KcAccountBaseModel, ? extends KcAccountRepository, ?, ?>> kcLoginService;
+    List<KcLoginService<? extends KcAccountBaseModel, ? extends KcAccountRepository, ?>> kcLoginService;
 
-    Map<Class<? extends KcAccountBaseModel>, KcLoginService<? extends KcAccountBaseModel, ? extends KcAccountRepository, ?, ?>> loginServiceMap;
+    Map<Class<? extends KcAccountBaseModel>, KcLoginService<? extends KcAccountBaseModel, ? extends KcAccountRepository, ?>> loginServiceMap;
 
     @PostConstruct
     public void initMap() {
@@ -44,14 +45,15 @@ public class ApiController {
     @PostMapping("/login")
     public Object login(
             @RequestBody Map<String, String> map,
-            @RequestParam String type
+            @RequestParam String type,
+            HttpServletResponse response
     ) {
         var id = map.get("id");
         var pw = map.get("pw");
 
         var clazz = "admin".equals(type) ? AdminAccount.class : UserAccount.class;
 
-        return this.loginServiceMap.get(clazz).login(id, pw);
+        return this.loginServiceMap.get(clazz).login(response, id, pw);
     }
 
     @GetMapping("/list/account")
@@ -63,6 +65,26 @@ public class ApiController {
 
         map.put("admin", admin);
         map.put("user", user);
+
+        return map;
+    }
+
+    @GetMapping("/auth/test/admin")
+    public Map<Object, Object> authTestAdmin() {
+        var map = new HashMap<>();
+
+        map.put("hi", "hello");
+        map.put("hi2", 234);
+
+        return map;
+    }
+
+    @GetMapping("/auth/test/user")
+    public Map<Object, Object> authTestUser() {
+        var map = new HashMap<>();
+
+        map.put("hi", "hello");
+        map.put("hi2", 234);
 
         return map;
     }

@@ -45,12 +45,12 @@ public class SecurityBeanContainer {
 
         authenticationProviderManager.addAuthenticationProvider(
                 AdminAccount.class,
-                new KcUserDetailsAuthenticationProvider(this.bCryptPasswordEncoder(), this.adminAccountLoginManager)
+                new KcAuthenticationProvider(this.bCryptPasswordEncoder(), this.adminAccountLoginManager)
         );
 
         authenticationProviderManager.addAuthenticationProvider(
                 UserAccount.class,
-                new KcUserDetailsAuthenticationProvider(this.bCryptPasswordEncoder(), this.userLoginManager)
+                new KcAuthenticationProvider(this.bCryptPasswordEncoder(), this.userLoginManager)
         );
 
         return authenticationProviderManager;
@@ -60,8 +60,13 @@ public class SecurityBeanContainer {
     public KcJwtTokenProvider adminJwtTokenProvider() {
         return new KcDefaultJwtTokenProvider(JWT_SECRET_KEY, this.adminAccountLoginManager) {
             @Override
-            public int expireDays() {
+            public long getExpireDays() {
                 return 30;
+            }
+
+            @Override
+            public String getCookieName() {
+                return "KEENCHO_JWT_TOKEN";
             }
         };
     }

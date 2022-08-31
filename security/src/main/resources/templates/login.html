@@ -95,6 +95,10 @@
         </div>
         <br />
         <button id="btnLogin">Login</button>
+        <br/>
+        <button id="btnAuthTestAdmin">admin auth test</button>
+        <br/>
+        <button id="btnAuthTestUser">user auth test</button>
     </div>
     <div class="body-container">
         <h1>계정 목록 (관리자 / 사용자)</h1>
@@ -170,8 +174,10 @@
                 pw: pw
             });
 
-            $.ajax(`/api/login?type=${$('#type').val()}`,{
-                dataType: 'json',
+            const type = $('#type').val();
+
+            $.ajax(`/api/login?type=${type}`,{
+                dataType: type === 'admin' ? 'text' : 'json',
                 contentType: 'application/json',
                 type: 'POST',
                 data: params,
@@ -180,13 +186,58 @@
                 },
                 error: function(err) {
                     console.log(err);
-                    // alert(err.responseJSON.message);
+                    alert('error!')
                 },
                 complete: function() {
                     drawAccountList();
                 }
             })
         });
+
+        $('#btnAuthTest').on('click', function() {
+            $.ajax('/api/auth/test/admin', {
+                dataType: 'json',
+                contentType: 'application/json',
+                type: 'GET',
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(err) {
+                    console.log(err);
+                    alert('error!')
+                }
+            })
+        })
+
+        $('#btnAuthTestAdmin').on('click', function() {
+            $.ajax('/api/auth/test/admin', {
+                dataType: 'json',
+                contentType: 'application/json',
+                type: 'GET',
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(err) {
+                    console.log(err);
+                    alert('error!')
+                }
+            })
+        })
+
+        $('#btnAuthTestUser').on('click', function() {
+            $.ajax('/api/auth/test/user', {
+                dataType: 'json',
+                contentType: 'application/json',
+                type: 'GET',
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(err) {
+                    console.log(err);
+                    alert('error!')
+                }
+            })
+        })
 
         drawAccountList();
     });

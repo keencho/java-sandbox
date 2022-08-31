@@ -11,3 +11,8 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create-drop
+
+keencho:
+  p6spy:
+    start_package: com.sycho.security
+    limit_stack_trace: 10
