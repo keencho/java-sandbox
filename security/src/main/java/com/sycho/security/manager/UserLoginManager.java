@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.stream.Collectors;
 
 @Component
-public class UserLoginManager extends KcDefaultLoginManager<UserAccount, UserAccountRepository, Long> {
+public class UserLoginManager extends KcDefaultLoginManager<UserAccount, UserAccountRepository> {
     public UserLoginManager(UserAccountRepository userAccountRepository) {
         super(userAccountRepository);
     }
@@ -63,6 +63,7 @@ public class UserLoginManager extends KcDefaultLoginManager<UserAccount, UserAcc
         loginData.setAuthorities(authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet()));
 
         return new KcSecurityAccount(
+                UserAccount.class,
                 account.getLoginId(), account.getPassword(), new HashSet<>(authorities),
                 account.isAccountNonExpired(), account.isAccountNonLocked(), account.isCredentialsNonExpired(), account.isEnabled(),
                 loginData

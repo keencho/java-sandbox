@@ -1,6 +1,6 @@
 package com.sycho.security.service;
 
-import com.keencho.lib.spring.security.provider.KcAuthenticationProviderManager;
+import com.keencho.lib.spring.security.provider.manager.KcAuthenticationProviderManager;
 import com.keencho.lib.spring.security.provider.KcJwtTokenProvider;
 import com.keencho.lib.spring.security.service.KcDefaultLoginService;
 import com.sycho.security.manager.AdminLoginManager;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AdminLoginService extends KcDefaultLoginService<AdminAccount, AdminAccountRepository, Long, String> {
+public class AdminLoginService extends KcDefaultLoginService<AdminAccount, AdminAccountRepository> {
     public AdminLoginService(
             KcAuthenticationProviderManager authenticationProviderManager,
             AdminLoginManager accountLoginManager,

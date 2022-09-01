@@ -12,7 +12,7 @@ spring:
     hibernate:
       ddl-auto: create-drop
 
-keencho:
-  p6spy:
-    start_package: com.sycho.security
-    limit_stack_trace: 10
+#keencho:
+#  p6spy:
+#    start_package: com.sycho.security
+#    limit_stack_trace: 10

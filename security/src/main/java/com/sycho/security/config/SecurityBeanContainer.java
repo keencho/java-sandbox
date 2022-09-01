@@ -1,7 +1,13 @@
 package com.sycho.security.config;
 
 import com.keencho.lib.spring.common.config.KcGlobalExceptionHandler;
+import com.keencho.lib.spring.security.model.KcSecurityAccount;
 import com.keencho.lib.spring.security.provider.*;
+import com.keencho.lib.spring.security.provider.manager.KcAuthenticationProviderManager;
+import com.keencho.lib.spring.security.provider.manager.KcAuthenticationProviderManagerImpl;
+import com.keencho.lib.spring.security.resolver.KcAccountResolver;
+import com.keencho.lib.spring.security.resolver.manager.KcAccountResolverManager;
+import com.keencho.lib.spring.security.resolver.manager.KcAccountResolverManagerImpl;
 import com.sycho.security.manager.AdminLoginManager;
 import com.sycho.security.manager.UserLoginManager;
 import com.sycho.security.model.AdminAccount;
@@ -19,9 +25,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 public class SecurityBeanContainer {
 
     private static final String JWT_SECRET_KEY = "erklj3d12313";
-
-    @Autowired
-    AdminAccountRepository adminAccountRepository;
 
     @Autowired
     AdminLoginManager adminAccountLoginManager;
@@ -54,6 +57,20 @@ public class SecurityBeanContainer {
         );
 
         return authenticationProviderManager;
+    }
+
+    @Bean
+    public KcAccountResolverManager accountResolverManager() {
+        var accountResolverManager = new KcAccountResolverManagerImpl();
+        accountResolverManager.addAccountResolver(
+                AdminAccount.class, this.adminAccountLoginManager
+        );
+
+        accountResolverManager.addAccountResolver(
+                UserAccount.class, this.userLoginManager
+        );
+
+        return accountResolverManager;
     }
 
     @Bean("adminJwtTokenProvider")

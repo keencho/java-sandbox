@@ -2,7 +2,7 @@ package com.sycho.security.config;
 
 import com.keencho.lib.spring.security.config.KcJwtAuthenticationFilter;
 import com.keencho.lib.spring.security.config.KcWebSecurityExceptionHandling;
-import com.keencho.lib.spring.security.provider.KcAuthenticationProviderManager;
+import com.keencho.lib.spring.security.provider.manager.KcAuthenticationProviderManager;
 import com.keencho.lib.spring.security.provider.KcJwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -44,6 +44,7 @@ public class WebSecurityConfiguration {
         // 세션 사용하지 않음
 //        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+        // jwt token 인증부 필터등록
         http.addFilterBefore(new KcJwtAuthenticationFilter(kcJwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         http

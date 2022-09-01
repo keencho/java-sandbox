@@ -2,6 +2,7 @@ package com.sycho.security.controller;
 
 import com.keencho.lib.spring.security.model.KcAccountBaseModel;
 import com.keencho.lib.spring.security.repository.KcAccountRepository;
+import com.keencho.lib.spring.security.resolver.annotation.KcsAccount;
 import com.keencho.lib.spring.security.service.KcLoginService;
 import com.sycho.security.model.AdminAccount;
 import com.sycho.security.model.LoginAccountData;
@@ -10,6 +11,7 @@ import com.sycho.security.repository.AdminAccountRepository;
 import com.sycho.security.repository.UserAccountRepository;
 import com.sycho.security.service.AdminLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -23,9 +25,9 @@ import java.util.Map;
 public class ApiController {
 
     @Autowired
-    List<KcLoginService<? extends KcAccountBaseModel, ? extends KcAccountRepository, ?>> kcLoginService;
+    List<KcLoginService<? extends KcAccountBaseModel, ? extends KcAccountRepository<?, ?>>> kcLoginService;
 
-    Map<Class<? extends KcAccountBaseModel>, KcLoginService<? extends KcAccountBaseModel, ? extends KcAccountRepository, ?>> loginServiceMap;
+    Map<Class<? extends KcAccountBaseModel>, KcLoginService<? extends KcAccountBaseModel, ? extends KcAccountRepository<?, ?>>> loginServiceMap;
 
     @PostConstruct
     public void initMap() {
@@ -70,22 +72,16 @@ public class ApiController {
     }
 
     @GetMapping("/auth/test/admin")
-    public Map<Object, Object> authTestAdmin() {
-        var map = new HashMap<>();
-
-        map.put("hi", "hello");
-        map.put("hi2", 234);
-
-        return map;
+    public AdminAccount authTestAdmin(
+            @KcsAccount(required = true) AdminAccount adminAccount
+    ) {
+        return adminAccount;
     }
 
     @GetMapping("/auth/test/user")
-    public Map<Object, Object> authTestUser() {
-        var map = new HashMap<>();
-
-        map.put("hi", "hello");
-        map.put("hi2", 234);
-
-        return map;
+    public UserAccount authTestUser(
+            @KcsAccount(required = true) UserAccount userAccount
+    ) {
+        return userAccount;
     }
 }
