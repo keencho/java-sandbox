@@ -1,18 +1,17 @@
 package com.sycho.security.config;
 
 import com.keencho.lib.spring.common.config.KcGlobalExceptionHandler;
-import com.keencho.lib.spring.security.model.KcSecurityAccount;
-import com.keencho.lib.spring.security.provider.*;
+import com.keencho.lib.spring.security.provider.KcAuthenticationProvider;
+import com.keencho.lib.spring.security.provider.KcDefaultJwtTokenProvider;
+import com.keencho.lib.spring.security.provider.KcJwtTokenProvider;
 import com.keencho.lib.spring.security.provider.manager.KcAuthenticationProviderManager;
 import com.keencho.lib.spring.security.provider.manager.KcAuthenticationProviderManagerImpl;
-import com.keencho.lib.spring.security.resolver.KcAccountResolver;
 import com.keencho.lib.spring.security.resolver.manager.KcAccountResolverManager;
 import com.keencho.lib.spring.security.resolver.manager.KcAccountResolverManagerImpl;
 import com.sycho.security.manager.AdminLoginManager;
 import com.sycho.security.manager.UserLoginManager;
 import com.sycho.security.model.AdminAccount;
 import com.sycho.security.model.UserAccount;
-import com.sycho.security.repository.AdminAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +23,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 @ConditionalOnMissingBean(annotation = ControllerAdvice.class)
 public class SecurityBeanContainer {
 
-    private static final String JWT_SECRET_KEY = "erklj3d12313";
+    private static final String JWT_SECRET_KEY = "Qi0P4mU8ABq6M9nMZG5y67E6hmNad14n";
 
     @Autowired
     AdminLoginManager adminAccountLoginManager;
