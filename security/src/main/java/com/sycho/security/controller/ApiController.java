@@ -6,14 +6,12 @@ import com.keencho.lib.spring.security.repository.KcAccountRepository;
 import com.keencho.lib.spring.security.resolver.annotation.KcsAccount;
 import com.keencho.lib.spring.security.resolver.annotation.KcsAccountType;
 import com.keencho.lib.spring.security.service.KcLoginService;
+import com.sycho.security.model.AccountCustomObjectTestModel;
 import com.sycho.security.model.AdminAccount;
-import com.sycho.security.model.LoginAccountData;
 import com.sycho.security.model.UserAccount;
 import com.sycho.security.repository.AdminAccountRepository;
 import com.sycho.security.repository.UserAccountRepository;
-import com.sycho.security.service.AdminLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -76,7 +74,8 @@ public class ApiController {
     @GetMapping("/auth/test/admin")
     public AdminAccount authTestAdmin(
             @KcsAccount(required = true) AdminAccount adminAccount,
-            @KcsAccount(accountType = KcsAccountType.SECURITY_ACCOUNT) KcSecurityAccount securityAccount
+            @KcsAccount(accountType = KcsAccountType.SECURITY_ACCOUNT) KcSecurityAccount securityAccount,
+            @KcsAccount(accountType = KcsAccountType.SECURITY_ACCOUNT_CUSTOM_OBJECT) AccountCustomObjectTestModel testModel
             ) {
         return adminAccount;
     }
