@@ -1,8 +1,5 @@
 package com.sycho.security.config;
 
-import com.keencho.lib.spring.security.model.KcAccountBaseModel;
-import com.keencho.lib.spring.security.model.KcSecurityAccount;
-import com.keencho.lib.spring.security.resolver.KcWebSecurityAccountCustomObjectParser;
 import com.keencho.lib.spring.security.resolver.KcWebAccountResolver;
 import com.keencho.lib.spring.security.resolver.manager.KcAccountResolverManager;
 import com.sycho.security.model.AccountCustomObjectTestModel;
@@ -23,33 +20,6 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new KcWebAccountResolver(accountResolverManager, this.customObjectParser()));
-    }
-
-    private KcWebSecurityAccountCustomObjectParser<AccountCustomObjectTestModel> customObjectParser() {
-        return securityAccount -> {
-            var resolver = accountResolverManager.getKcAccountResolver(securityAccount.getAccountEntityClass());
-
-            if (resolver != null) {
-                var account = resolver.getAccountBySecurityAccount(securityAccount);
-
-                var model = new AccountCustomObjectTestModel();
-                if (account instanceof AdminAccount adminAccount) {
-                    model.setId(adminAccount.getId());
-                    model.setLoginId(adminAccount.getLoginId());
-                    model.setKey("ADMIN");
-                }
-
-                if (account instanceof UserAccount userAccount) {
-                    model.setId(userAccount.getId());
-                    model.setLoginId(userAccount.getLoginId());
-                    model.setKey("USER");
-                }
-
-                return model;
-            }
-
-            return null;
-        };
+        resolvers.add(new KcWebAccountResolver(accountResolverManager));
     }
 }

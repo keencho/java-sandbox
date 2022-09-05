@@ -74,8 +74,7 @@ public class ApiController {
     @GetMapping("/auth/test/admin")
     public AdminAccount authTestAdmin(
             @KcsAccount(required = true) AdminAccount adminAccount,
-            @KcsAccount(accountType = KcsAccountType.SECURITY_ACCOUNT) KcSecurityAccount securityAccount,
-            @KcsAccount(accountType = KcsAccountType.SECURITY_ACCOUNT_CUSTOM_OBJECT) AccountCustomObjectTestModel testModel
+            @KcsAccount(accountType = KcsAccountType.SECURITY_ACCOUNT) KcSecurityAccount securityAccount
             ) {
         return adminAccount;
     }
