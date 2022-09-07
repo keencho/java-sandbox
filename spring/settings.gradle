@@ -1,1 +1,4 @@
 rootProject.name = 'basic'
+
+include 'lib-spring'
+project(':lib-spring').projectDir = new File('D:\\workspace\\lib-spring-security')

@@ -1,4 +1,4 @@
-package sycho.spring.basic.service;
+package sycho.spring.basic.async.service;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 @Service
-public class SpringService {
+public class AsyncService {
 
     private static final int THREAD_MILLS = 5000;
 

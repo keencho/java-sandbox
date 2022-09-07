@@ -1,4 +1,4 @@
-package sycho.spring.basic.controller;
+package sycho.spring.basic.async.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -6,29 +6,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sycho.spring.basic.service.SpringService;
+import sycho.spring.basic.async.service.AsyncService;
 
 import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/async-test")
-public class SpringController {
+public class AsyncTestController {
 
     @Autowired
-    SpringService springService;
+    AsyncService asyncService;
 
     @GetMapping("/{num}")
     public ResponseEntity<?> test(@PathVariable int num) throws InterruptedException {
         switch (num) {
             case 1:
-                springService.test1();
+                asyncService.test1();
                 break;
             case 2:
-                var t2 = springService.test2();
+                var t2 = asyncService.test2();
 //                System.out.println(result.get());
                 break;
             case 3:
-                var t3 = springService.test3();
+                var t3 = asyncService.test3();
 
                 t3.addCallback(
                         res -> {
@@ -40,7 +40,7 @@ public class SpringController {
                 );
                 break;
             case 4:
-                var t4 = springService.test4();
+                var t4 = asyncService.test4();
 
                 var t4Res = t4.handle((s, e) -> {
                     if (e != null) {
