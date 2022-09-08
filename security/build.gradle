@@ -21,6 +21,7 @@ repositories {
 
 dependencies {
     implementation 'com.github.keencho:lib-custom-p6spy:1.0.1'
+    implementation 'com.github.keencho:lib-spring:1.0.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
