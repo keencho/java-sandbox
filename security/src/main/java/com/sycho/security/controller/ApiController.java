@@ -1,12 +1,9 @@
 package com.sycho.security.controller;
 
 import com.keencho.lib.spring.security.model.KcAccountBaseModel;
-import com.keencho.lib.spring.security.model.KcSecurityAccount;
 import com.keencho.lib.spring.security.repository.KcAccountRepository;
 import com.keencho.lib.spring.security.resolver.annotation.KcsAccount;
-import com.keencho.lib.spring.security.resolver.annotation.KcsAccountType;
 import com.keencho.lib.spring.security.service.KcLoginService;
-import com.sycho.security.model.AccountCustomObjectTestModel;
 import com.sycho.security.model.AdminAccount;
 import com.sycho.security.model.UserAccount;
 import com.sycho.security.repository.AdminAccountRepository;
@@ -73,8 +70,7 @@ public class ApiController {
 
     @GetMapping("/auth/test/admin")
     public AdminAccount authTestAdmin(
-            @KcsAccount(required = true) AdminAccount adminAccount,
-            @KcsAccount(accountType = KcsAccountType.SECURITY_ACCOUNT) KcSecurityAccount securityAccount
+            @KcsAccount(required = true) AdminAccount adminAccount
             ) {
         return adminAccount;
     }

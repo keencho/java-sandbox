@@ -1,5 +1,6 @@
 package com.keencho.spring.jpa;
 
+import com.keencho.lib.spring.jpa.querydsl.KcGenericExporter;
 import com.keencho.spring.jpa.querydsl.Q;
 import com.keencho.spring.jpa.querydsl.dto.DeliveryDTO;
 import com.keencho.spring.jpa.querydsl.dto.QDeliveryDTO;
@@ -8,8 +9,8 @@ import com.keencho.spring.jpa.querydsl.model.Order;
 import com.keencho.spring.jpa.querydsl.repository.DeliveryRepository;
 import com.keencho.spring.jpa.querydsl.repository.OrderRepository;
 import com.keencho.spring.jpa.utils.FakerUtils;
+import com.querydsl.codegen.Keywords;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.persistence.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -99,18 +102,16 @@ public class QueryDSLTest {
     }
 
     @Test
-    public void test() {
-        var q = Q.delivery;
+    public void generateTest() {
 
-        var i = queryFactory
-                .select(Projections.bean(
-                        QDeliveryDTO.class,
-                        q.deliveryId,
-                        q.fromName
-                ))
-                .from(q)
-                .fetch();
-
-        System.out.println(i);
+        var exporter = new KcGenericExporter();
+        exporter.setKeywords(Keywords.JPA);
+        exporter.setEntityAnnotation(Entity.class);
+        exporter.setEmbeddableAnnotation(Embeddable.class);
+        exporter.setEmbeddedAnnotation(Embedded.class);
+        exporter.setSupertypeAnnotation(MappedSuperclass.class);
+        exporter.setSkipAnnotation(Transient.class);
+        exporter.setTargetFolder(new File("build/generated/querydsl"));
+        exporter.export(KeenchoSpringJpaApplication.class.getPackage());
     }
 }
