@@ -4,6 +4,8 @@ import com.keencho.lib.spring.jpa.querydsl.KcGenericExporter;
 import com.keencho.spring.jpa.querydsl.Q;
 import com.keencho.spring.jpa.querydsl.dto.DeliveryDTO;
 import com.keencho.spring.jpa.querydsl.dto.QDeliveryDTO;
+import com.keencho.spring.jpa.querydsl.dto.QSimpleDTO;
+import com.keencho.spring.jpa.querydsl.dto.QSimpleDTOV2;
 import com.keencho.spring.jpa.querydsl.model.Delivery;
 import com.keencho.spring.jpa.querydsl.model.Order;
 import com.keencho.spring.jpa.querydsl.repository.DeliveryRepository;
@@ -102,16 +104,27 @@ public class QueryDSLTest {
     }
 
     @Test
-    public void generateTest() {
+    void dtoTest() {
+        var q = Q.delivery;
+        var dto = QSimpleDTOV2.builder()
+                .deliveryId(q.deliveryId)
+                .orderId(q.order.orderId)
+                .build();
 
-        var exporter = new KcGenericExporter();
-        exporter.setKeywords(Keywords.JPA);
-        exporter.setEntityAnnotation(Entity.class);
-        exporter.setEmbeddableAnnotation(Embeddable.class);
-        exporter.setEmbeddedAnnotation(Embedded.class);
-        exporter.setSupertypeAnnotation(MappedSuperclass.class);
-        exporter.setSkipAnnotation(Transient.class);
-        exporter.setTargetFolder(new File("build/generated/querydsl"));
-        exporter.export(KeenchoSpringJpaApplication.class.getPackage());
+        var dto2 = QSimpleDTOV2.constructor();
+        dto2.setDeliveryId(q.deliveryId);
+        dto2.setOrderId(q.order.orderId);
+
+        var i = queryFactory
+                .select(dto)
+                .from(q)
+                .fetch();
+
+        var i2 = queryFactory
+                .select(dto2.build())
+                .from(q)
+                .fetch();
+
+        Assert.isTrue(i.size() == i2.size(), "check!");
     }
 }
