@@ -1,7 +1,9 @@
 package com.keencho.spring.jpa.querydsl.repository;
 
+import com.keencho.lib.spring.jpa.querydsl.repository.KcJpaRepository;
 import com.keencho.spring.jpa.querydsl.model.Delivery;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
+@Repository
+public interface DeliveryRepository extends KcJpaRepository<Delivery, Long> {
 }
