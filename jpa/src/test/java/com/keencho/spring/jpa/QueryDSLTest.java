@@ -1,23 +1,19 @@
 package com.keencho.spring.jpa;
 
 import com.keencho.spring.jpa.querydsl.Q;
-import com.keencho.spring.jpa.querydsl.dto.DeliveryDTO;
-import com.keencho.spring.jpa.querydsl.dto.QDeliveryDTO;
+import com.keencho.spring.jpa.querydsl.dto.KcQSimpleDTO;
 import com.keencho.spring.jpa.querydsl.dto.QSimpleDTO;
+import com.keencho.spring.jpa.querydsl.dto.SimpleKcProjectionExpressionDTO;
 import com.keencho.spring.jpa.querydsl.model.Delivery;
 import com.keencho.spring.jpa.querydsl.model.Order;
 import com.keencho.spring.jpa.querydsl.repository.DeliveryRepository;
 import com.keencho.spring.jpa.querydsl.repository.OrderRepository;
 import com.keencho.spring.jpa.utils.FakerUtils;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -67,12 +63,18 @@ public class QueryDSLTest {
     @Test
     public void reflectionTest() {
         var q = Q.delivery;
+        var dto = new KcQSimpleDTO();
+        dto.setOrderId(q.order.orderId);
+        dto.setDeliveryId(q.deliveryId);
 
-//        var list = deliveryRepository.selectList(
-//                null,
-//                QSimpleDTO.builder().deliveryId(q.deliveryId).orderId(q.order.orderId)
-//        );
-//
-//        System.out.println(list.size());
+        var dto2 = KcQSimpleDTO.builder()
+                .orderId(q.order.orderId)
+                .deliveryId(q.deliveryId)
+                .build();
+
+
+        var list = deliveryRepository.selectList(null, dto2);
+
+        System.out.println(list.size());
     }
 }
