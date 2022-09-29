@@ -4,10 +4,12 @@ import com.keencho.lib.spring.jpa.querydsl.annotation.KcQueryProjection;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 @KcQueryProjection
 public class DeliveryDTO {
     Long deliveryId;
