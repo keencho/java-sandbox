@@ -16,6 +16,7 @@ repositories {
 
 dependencies {
     implementation project(path: ':lib-spring', configuration: 'default')
+    implementation 'com.github.keencho:lib-custom-p6spy:1.0.1'
 //    implementation 'com.github.keencho:lib-spring:-SNAPSHOT'
 //    implementation 'com.github.keencho:lib-spring:1.0.4'
 

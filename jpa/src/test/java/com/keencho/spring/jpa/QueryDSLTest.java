@@ -1,18 +1,20 @@
 package com.keencho.spring.jpa;
 
 import com.keencho.spring.jpa.querydsl.Q;
+import com.keencho.spring.jpa.querydsl.dto.KcQDeliveryDTO;
 import com.keencho.spring.jpa.querydsl.dto.KcQSimpleDTO;
 import com.keencho.spring.jpa.querydsl.dto.QSimpleDTO;
-import com.keencho.spring.jpa.querydsl.dto.SimpleKcProjectionExpressionDTO;
 import com.keencho.spring.jpa.querydsl.model.Delivery;
 import com.keencho.spring.jpa.querydsl.model.Order;
 import com.keencho.spring.jpa.querydsl.repository.DeliveryRepository;
 import com.keencho.spring.jpa.querydsl.repository.OrderRepository;
 import com.keencho.spring.jpa.utils.FakerUtils;
+import com.querydsl.core.BooleanBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.querydsl.QSort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -61,19 +63,24 @@ public class QueryDSLTest {
     }
 
     @Test
-    public void reflectionTest() {
+    public void queryTest() {
         var q = Q.delivery;
-        var dto = new KcQSimpleDTO();
-        dto.setOrderId(q.order.orderId);
-        dto.setDeliveryId(q.deliveryId);
 
-        var dto2 = KcQSimpleDTO.builder()
+        var deliveryDTO = new KcQDeliveryDTO();
+        deliveryDTO.setFromAddress(q.fromAddress);
+        deliveryDTO.setFromName(q.fromName);
+        deliveryDTO.setFromNumber(q.fromNumber);
+        deliveryDTO.build();
+
+        var simpleDTO = KcQSimpleDTO.builder()
                 .orderId(q.order.orderId)
                 .deliveryId(q.deliveryId)
+                .deliveryDTO(deliveryDTO.build())
                 .build();
 
+        var sort = new QSort(q.order.orderId.asc(), q.deliveryId.desc());
 
-        var list = deliveryRepository.selectList(null, dto2);
+        var list = deliveryRepository.selectList(null, simpleDTO, sort);
 
         System.out.println(list.size());
     }
