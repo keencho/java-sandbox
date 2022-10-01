@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-@KcQueryProjection
+@KcQueryProjection(useSetter = true)
 public class DeliveryDTO {
     Long deliveryId;
     String fromName;

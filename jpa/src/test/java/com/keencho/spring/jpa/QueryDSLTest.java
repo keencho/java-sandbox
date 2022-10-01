@@ -3,13 +3,11 @@ package com.keencho.spring.jpa;
 import com.keencho.spring.jpa.querydsl.Q;
 import com.keencho.spring.jpa.querydsl.dto.KcQDeliveryDTO;
 import com.keencho.spring.jpa.querydsl.dto.KcQSimpleDTO;
-import com.keencho.spring.jpa.querydsl.dto.QSimpleDTO;
 import com.keencho.spring.jpa.querydsl.model.Delivery;
 import com.keencho.spring.jpa.querydsl.model.Order;
 import com.keencho.spring.jpa.querydsl.repository.DeliveryRepository;
 import com.keencho.spring.jpa.querydsl.repository.OrderRepository;
 import com.keencho.spring.jpa.utils.FakerUtils;
-import com.querydsl.core.BooleanBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +68,6 @@ public class QueryDSLTest {
         deliveryDTO.setFromAddress(q.fromAddress);
         deliveryDTO.setFromName(q.fromName);
         deliveryDTO.setFromNumber(q.fromNumber);
-        deliveryDTO.build();
 
         var simpleDTO = KcQSimpleDTO.builder()
                 .orderId(q.order.orderId)
