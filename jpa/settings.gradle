@@ -1,4 +1,4 @@
 rootProject.name = 'jpa'
 
 include 'lib-spring'
-project(':lib-spring').projectDir = new File('C:\\workspace\\lib-spring-security')
+project(':lib-spring').projectDir = new File('D:\\workspace\\lib-spring-security')

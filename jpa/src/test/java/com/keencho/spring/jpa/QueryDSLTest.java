@@ -2,9 +2,13 @@ package com.keencho.spring.jpa;
 
 import com.keencho.spring.jpa.querydsl.Q;
 import com.keencho.spring.jpa.querydsl.dto.KcQDeliveryDTO;
+import com.keencho.spring.jpa.querydsl.dto.KcQDeliveryHistoryDTO;
 import com.keencho.spring.jpa.querydsl.dto.KcQSimpleDTO;
 import com.keencho.spring.jpa.querydsl.model.Delivery;
+import com.keencho.spring.jpa.querydsl.model.DeliveryHistory;
 import com.keencho.spring.jpa.querydsl.model.Order;
+import com.keencho.spring.jpa.querydsl.model.QDelivery;
+import com.keencho.spring.jpa.querydsl.repository.DeliveryHistoryRepository;
 import com.keencho.spring.jpa.querydsl.repository.DeliveryRepository;
 import com.keencho.spring.jpa.querydsl.repository.OrderRepository;
 import com.keencho.spring.jpa.utils.FakerUtils;
@@ -27,6 +31,9 @@ public class QueryDSLTest {
 
     @Autowired
     OrderRepository orderRepository;
+
+    @Autowired
+    DeliveryHistoryRepository deliveryHistoryRepository;
 
     Random rand = new Random();
 
@@ -56,7 +63,19 @@ public class QueryDSLTest {
 
             delivery.setOrder(orderList.get(rand.nextInt(orderList.size())));
 
-            deliveryRepository.save(delivery);
+            var d = deliveryRepository.save(delivery);
+
+            var deliveryHistory1 = new DeliveryHistory();
+            deliveryHistory1.setDeliveryId(d.getDeliveryId());
+            deliveryHistory1.setText("[생성] 배송이 생성되었습니다.");
+
+            deliveryHistoryRepository.save(deliveryHistory1);
+
+            var deliveryHistory2 = new DeliveryHistory();
+            deliveryHistory2.setDeliveryId(d.getDeliveryId());
+            deliveryHistory2.setText("[배차] 배송이 배차되었습니다.");
+
+            deliveryHistoryRepository.save(deliveryHistory2);
         }
     }
 
@@ -77,8 +96,35 @@ public class QueryDSLTest {
 
         var sort = new QSort(q.order.orderId.asc(), q.deliveryId.desc());
 
-        var list = deliveryRepository.selectList(null, simpleDTO, sort);
+        var list = deliveryRepository.selectList(null, simpleDTO, null, sort);
 
         System.out.println(list.size());
+    }
+
+    @Test
+    public void queryHandlerTest() {
+        var q = Q.deliveryHistory;
+        var dq = Q.delivery;
+
+        var dDTO = KcQDeliveryDTO.builder()
+                .fromAddress(dq.fromAddress)
+                .fromName(dq.fromName)
+                .build();
+
+        var dto = KcQDeliveryHistoryDTO.builder()
+                .id(q.id)
+                .text(q.text)
+                .deliveryDTO(dDTO.build())
+                .build();
+
+        var list = deliveryHistoryRepository
+                .selectList(
+                        null,
+                        dto,
+                        (query) -> query.leftJoin(dq).on(dq.deliveryId.eq(q.deliveryId)),
+                        null);
+
+        System.out.println(list.size());
+
     }
 }
