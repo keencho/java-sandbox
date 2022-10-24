@@ -12,10 +12,13 @@ import com.keencho.spring.jpa.querydsl.repository.DeliveryHistoryRepository;
 import com.keencho.spring.jpa.querydsl.repository.DeliveryRepository;
 import com.keencho.spring.jpa.querydsl.repository.OrderRepository;
 import com.keencho.spring.jpa.utils.FakerUtils;
+import com.querydsl.core.BooleanBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.QSort;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -117,14 +120,80 @@ public class QueryDSLTest {
                 .deliveryDTO(dDTO.build())
                 .build();
 
+        var predicate = new BooleanBuilder();
+        predicate.and(dq.fromName.startsWith("김"));
+
         var list = deliveryHistoryRepository
                 .selectList(
                         null,
                         dto,
-                        (query) -> query.leftJoin(dq).on(dq.deliveryId.eq(q.deliveryId)),
-                        null);
+                        (query) -> query.leftJoin(dq).on(dq.deliveryId.eq(q.deliveryId))
+                );
+    }
 
-        System.out.println(list.size());
+    @Test
+    public void pagingTest() {
+        var q = Q.deliveryHistory;
+        var dq = Q.delivery;
 
+        var dDTO = KcQDeliveryDTO.builder()
+                .fromAddress(dq.fromAddress)
+                .fromName(dq.fromName)
+                .build();
+
+        var dto = KcQDeliveryHistoryDTO.builder()
+                .id(q.id)
+                .text(q.text)
+                .deliveryDTO(dDTO.build())
+                .build();
+
+        var list = deliveryHistoryRepository.selectPage(null, dto, new Pageable() {
+            @Override
+            public int getPageNumber() {
+                return 0;
+            }
+
+            @Override
+            public int getPageSize() {
+                return 10;
+            }
+
+            @Override
+            public long getOffset() {
+                return 0;
+            }
+
+            @Override
+            public Sort getSort() {
+                return new QSort(q.id.desc());
+            }
+
+            @Override
+            public Pageable next() {
+                return null;
+            }
+
+            @Override
+            public Pageable previousOrFirst() {
+                return null;
+            }
+
+            @Override
+            public Pageable first() {
+                return null;
+            }
+
+            @Override
+            public Pageable withPage(int pageNumber) {
+                return null;
+            }
+
+            @Override
+            public boolean hasPrevious() {
+                return false;
+            }
+        }, (query) -> query.leftJoin(dq).on(dq.deliveryId.eq(q.deliveryId)));
+
+        System.out.println(list);
     }
 }
