@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
     implementation 'com.github.keencho:lib-custom-p6spy:1.0.1'
-    implementation 'com.github.keencho:lib-spring:1.0.4'
+    implementation 'com.github.keencho:lib-spring:1.0.6'
 
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'com.h2database:h2:1.4.200'

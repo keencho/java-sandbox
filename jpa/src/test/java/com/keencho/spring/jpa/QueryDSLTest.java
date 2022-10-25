@@ -1,18 +1,20 @@
 package com.keencho.spring.jpa;
 
 import com.keencho.spring.jpa.querydsl.Q;
+import com.keencho.spring.jpa.querydsl.dto.DeliveryDTO;
 import com.keencho.spring.jpa.querydsl.dto.KcQDeliveryDTO;
 import com.keencho.spring.jpa.querydsl.dto.KcQDeliveryHistoryDTO;
 import com.keencho.spring.jpa.querydsl.dto.KcQSimpleDTO;
 import com.keencho.spring.jpa.querydsl.model.Delivery;
 import com.keencho.spring.jpa.querydsl.model.DeliveryHistory;
 import com.keencho.spring.jpa.querydsl.model.Order;
-import com.keencho.spring.jpa.querydsl.model.QDelivery;
 import com.keencho.spring.jpa.querydsl.repository.DeliveryHistoryRepository;
 import com.keencho.spring.jpa.querydsl.repository.DeliveryRepository;
 import com.keencho.spring.jpa.querydsl.repository.OrderRepository;
 import com.keencho.spring.jpa.utils.FakerUtils;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Expression;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.data.querydsl.QSort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 @SpringBootTest
@@ -195,5 +198,23 @@ public class QueryDSLTest {
         }, (query) -> query.leftJoin(dq).on(dq.deliveryId.eq(q.deliveryId)));
 
         System.out.println(list);
+    }
+
+    @Test
+    public void mapBindingTest() {
+        var q = Q.delivery;
+        var bindings = new HashMap<String, Expression<?>>();
+
+        bindings.put("fromName", q.fromName);
+        bindings.put("fromNumber", q.fromNumber);
+        bindings.put("fromAddress", q.fromAddress);
+
+        bindings.put("toName", q.toName);
+        bindings.put("toNumber", q.toNumber);
+        bindings.put("toAddress", q.toAddress);
+
+        var list = deliveryRepository.selectList(null, DeliveryDTO.class, bindings);
+
+        Assertions.assertFalse(list.isEmpty());
     }
 }
