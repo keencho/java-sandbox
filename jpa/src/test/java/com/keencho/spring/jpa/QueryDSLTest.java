@@ -1,21 +1,31 @@
 package com.keencho.spring.jpa;
 
 import com.keencho.spring.jpa.querydsl.Q;
+import com.keencho.spring.jpa.querydsl.dto.DeliveryDTO;
 import com.keencho.spring.jpa.querydsl.dto.KcQDeliveryDTO;
+import com.keencho.spring.jpa.querydsl.dto.KcQDeliveryHistoryDTO;
 import com.keencho.spring.jpa.querydsl.dto.KcQSimpleDTO;
 import com.keencho.spring.jpa.querydsl.model.Delivery;
+import com.keencho.spring.jpa.querydsl.model.DeliveryHistory;
 import com.keencho.spring.jpa.querydsl.model.Order;
+import com.keencho.spring.jpa.querydsl.repository.DeliveryHistoryRepository;
 import com.keencho.spring.jpa.querydsl.repository.DeliveryRepository;
 import com.keencho.spring.jpa.querydsl.repository.OrderRepository;
 import com.keencho.spring.jpa.utils.FakerUtils;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Expression;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.QSort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 @SpringBootTest
@@ -27,6 +37,9 @@ public class QueryDSLTest {
 
     @Autowired
     OrderRepository orderRepository;
+
+    @Autowired
+    DeliveryHistoryRepository deliveryHistoryRepository;
 
     Random rand = new Random();
 
@@ -56,7 +69,19 @@ public class QueryDSLTest {
 
             delivery.setOrder(orderList.get(rand.nextInt(orderList.size())));
 
-            deliveryRepository.save(delivery);
+            var d = deliveryRepository.save(delivery);
+
+            var deliveryHistory1 = new DeliveryHistory();
+            deliveryHistory1.setDeliveryId(d.getDeliveryId());
+            deliveryHistory1.setText("[생성] 배송이 생성되었습니다.");
+
+            deliveryHistoryRepository.save(deliveryHistory1);
+
+            var deliveryHistory2 = new DeliveryHistory();
+            deliveryHistory2.setDeliveryId(d.getDeliveryId());
+            deliveryHistory2.setText("[배차] 배송이 배차되었습니다.");
+
+            deliveryHistoryRepository.save(deliveryHistory2);
         }
     }
 
@@ -80,5 +105,116 @@ public class QueryDSLTest {
         var list = deliveryRepository.selectList(null, simpleDTO, null, sort);
 
         System.out.println(list.size());
+    }
+
+    @Test
+    public void queryHandlerTest() {
+        var q = Q.deliveryHistory;
+        var dq = Q.delivery;
+
+        var dDTO = KcQDeliveryDTO.builder()
+                .fromAddress(dq.fromAddress)
+                .fromName(dq.fromName)
+                .build();
+
+        var dto = KcQDeliveryHistoryDTO.builder()
+                .id(q.id)
+                .text(q.text)
+                .deliveryDTO(dDTO.build())
+                .build();
+
+        var predicate = new BooleanBuilder();
+        predicate.and(dq.fromName.startsWith("김"));
+
+        var list = deliveryHistoryRepository
+                .selectList(
+                        null,
+                        dto,
+                        (query) -> query.leftJoin(dq).on(dq.deliveryId.eq(q.deliveryId))
+                );
+    }
+
+    @Test
+    public void pagingTest() {
+        var q = Q.deliveryHistory;
+        var dq = Q.delivery;
+
+        var dDTO = KcQDeliveryDTO.builder()
+                .fromAddress(dq.fromAddress)
+                .fromName(dq.fromName)
+                .build();
+
+        var dto = KcQDeliveryHistoryDTO.builder()
+                .id(q.id)
+                .text(q.text)
+                .deliveryDTO(dDTO.build())
+                .build();
+
+        var list = deliveryHistoryRepository.selectPage(null, dto, new Pageable() {
+            @Override
+            public int getPageNumber() {
+                return 0;
+            }
+
+            @Override
+            public int getPageSize() {
+                return 10;
+            }
+
+            @Override
+            public long getOffset() {
+                return 0;
+            }
+
+            @Override
+            public Sort getSort() {
+                return new QSort(q.id.desc());
+            }
+
+            @Override
+            public Pageable next() {
+                return null;
+            }
+
+            @Override
+            public Pageable previousOrFirst() {
+                return null;
+            }
+
+            @Override
+            public Pageable first() {
+                return null;
+            }
+
+            @Override
+            public Pageable withPage(int pageNumber) {
+                return null;
+            }
+
+            @Override
+            public boolean hasPrevious() {
+                return false;
+            }
+        }, (query) -> query.leftJoin(dq).on(dq.deliveryId.eq(q.deliveryId)));
+
+        System.out.println(list);
+    }
+
+    @Test
+    public void mapBindingTest() {
+        var q = Q.delivery;
+        var bindings = new HashMap<String, Expression<?>>();
+
+        bindings.put("fromName", q.fromName);
+        bindings.put("fromNumber", q.fromNumber);
+        bindings.put("fromAddress", q.fromAddress);
+
+        bindings.put("toName", q.toName);
+        bindings.put("toNumber", q.toNumber);
+        bindings.put("toAddress", q.toAddress);
+
+        var list = deliveryRepository.selectList(null, DeliveryDTO.class, bindings);
+
+        Assertions.assertFalse(list.isEmpty());
     }
 }
