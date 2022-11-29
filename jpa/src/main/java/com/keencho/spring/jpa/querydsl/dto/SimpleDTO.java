@@ -14,11 +14,5 @@ public class SimpleDTO {
     String field;
     DeliveryDTO deliveryDTO;
 
-    @QueryProjection
-    public SimpleDTO(Long deliveryId, Long orderId, String field, DeliveryDTO deliveryDTO) {
-        this.deliveryId = deliveryId;
-        this.orderId = orderId;
-        this.field = field;
-        this.deliveryDTO = deliveryDTO;
-    }
+
 }

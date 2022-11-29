@@ -77,7 +77,7 @@ public class QueryDSLTest {
 
         var sort = new QSort(q.order.orderId.asc(), q.deliveryId.desc());
 
-        var list = deliveryRepository.selectList(null, simpleDTO, sort);
+        var list = deliveryRepository.selectList(null, simpleDTO, null, sort);
 
         System.out.println(list.size());
     }

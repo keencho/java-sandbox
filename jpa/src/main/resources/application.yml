@@ -7,14 +7,14 @@ logging:
 
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:../test
-    username: sa
-    password:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/jpa
+    username: postgres
+    password: 123qwe@@
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 
 keencho:
   p6spy:
