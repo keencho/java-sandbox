@@ -11,6 +11,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.ExecutionException;
 
 @SpringBootTest
 public class UpdateSpecificColumnsTest {
@@ -41,6 +42,20 @@ public class UpdateSpecificColumnsTest {
     // 결국 동일한 transactional 로직을 따른다는것을 확인할 수 있음.
     public void queryDSLTxRollback() {
         service.queryDSLTxRollback();
+    }
+
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    public void jpaTxRollbackLoop() {
+        service.jpaTxRollbackLoop();
+    }
+
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    public void jpaTxRollbackAsyncLoop() throws ExecutionException, InterruptedException {
+        service.jpaTxRollbackAsyncLoop();
     }
 
     @Test
