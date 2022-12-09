@@ -1,24 +1,27 @@
 package com.keencho.spring.jpa;
 
 import com.keencho.spring.jpa.repository.SoccerPlayerRepository;
-import com.keencho.spring.jpa.service.TransactionService;
+import com.keencho.spring.jpa.service.TransactionPropagationTestService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.Assert;
 
+/**
+ * 트랜잭션 전파레벨 테스트
+ */
 @SpringBootTest
 public class TransactionPropagationTest {
 
     @Autowired
-    TransactionService transactionService;
+    TransactionPropagationTestService transactionPropagationTestService;
 
     @Autowired
     SoccerPlayerRepository soccerPlayerRepository;
 
     @Test
     public void REQUIRED() {
-        transactionService.required();
+        transactionPropagationTestService.required();
 
         var list = soccerPlayerRepository.findAll();
 
@@ -27,7 +30,7 @@ public class TransactionPropagationTest {
 
     @Test
     public void SUPPORTS_1() {
-        transactionService.supports_1();
+        transactionPropagationTestService.supports_1();
 
         var list = soccerPlayerRepository.findAll();
 
@@ -36,7 +39,7 @@ public class TransactionPropagationTest {
 
     @Test
     public void SUPPORTS_2() {
-        transactionService.supports_2();
+        transactionPropagationTestService.supports_2();
 
         var list = soccerPlayerRepository.findAll();
 
@@ -45,28 +48,28 @@ public class TransactionPropagationTest {
 
     @Test
     public void MANDATORY() {
-        transactionService.mandatory();
+        transactionPropagationTestService.mandatory();
 
         soccerPlayerRepository.findByName("손흥민").orElseThrow(() -> new RuntimeException("soccer player must not be null"));
     }
 
     @Test
     public void NEVER() {
-        transactionService.never();
+        transactionPropagationTestService.never();
 
         soccerPlayerRepository.findByName("손흥민").orElseThrow(() -> new RuntimeException("soccer player must not be null"));
     }
 
     @Test
     public void NOT_SUPPORTED() {
-        transactionService.notSupported();
+        transactionPropagationTestService.notSupported();
 
         soccerPlayerRepository.findByName("손흥민").orElseThrow(() -> new RuntimeException("soccer player must not be null"));
     }
 
     @Test
     public void NESTED() {
-        transactionService.nested();
+        transactionPropagationTestService.nested();
 
         var soccerPlayerList = soccerPlayerRepository.findAll();
 
@@ -76,7 +79,7 @@ public class TransactionPropagationTest {
     @Test
     public void REQUIRES_NEW() {
         try {
-            transactionService.requiresNew();
+            transactionPropagationTestService.requiresNew();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

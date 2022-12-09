@@ -26,6 +26,12 @@ public class SoccerPlayer {
     @ManyToOne
     SoccerTeam soccerTeam;
 
+    int age;
+
+    int height;
+
+    int weight;
+
     @Override
     public String toString() {
         return String.format("name = %s / soccerTeamName = %s", name, soccerTeam != null ? soccerTeam.getName() : null);

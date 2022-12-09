@@ -10,6 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+/**
+ * Event Listener 테스트 - SoccerTeamListeners.java 파일 참조
+ *
+ * 원래 bean으로 등록이 안되지만 SimpleEventListeners 인터페이스를 상속받은 클래스를 @PostConstruct 시점에 bean 주입시킴
+ */
 @SpringBootTest
 public class EventListenerTest {
 
@@ -30,7 +35,7 @@ public class EventListenerTest {
     }
 
     @Test
-    public void test() {
+    public void prePersistTest() {
         var soccerTeam = soccerTeamRepository
                 .findByName(soccerTeamName)
                 .orElseThrow(() -> new RuntimeException("soccer team should not be null"));

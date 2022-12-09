@@ -1,4 +1,4 @@
-package com.keencho.spring.jpa.config.eventlistener;
+package com.keencho.spring.jpa.config;
 
 import com.keencho.spring.jpa.listeners.SimpleEventListeners;
 import org.springframework.beans.factory.annotation.Autowired;

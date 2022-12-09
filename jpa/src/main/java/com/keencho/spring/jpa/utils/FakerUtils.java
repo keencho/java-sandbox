@@ -17,4 +17,8 @@ public class FakerUtils {
         return faker.phoneNumber().cellPhone();
     }
 
+    public static String teamName() {
+        return faker.team().name();
+    }
+
 }

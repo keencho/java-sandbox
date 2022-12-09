@@ -12,6 +12,9 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 
+/**
+ * 저장, 조회시 Flush Mode가 순서에 끼치는 영향 테스트
+ */
 @SpringBootTest
 @Transactional
 public class FlushTest {

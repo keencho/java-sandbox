@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class TransactionService {
+public class TransactionPropagationTestService {
 
     @Autowired
     SoccerPlayerRepository soccerPlayerRepository;
 
     @Autowired
-    TransactionChildService transactionChildService;
+    TransactionPropagationTestChildService transactionPropagationTestChildService;
 
     @Transactional
     public void required() {
@@ -21,7 +21,7 @@ public class TransactionService {
         player1.setName("손흥민");
 
         try {
-            transactionChildService.insertRequired(player1);
+            transactionPropagationTestChildService.insertRequired(player1);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -48,7 +48,7 @@ public class TransactionService {
                 soccerPlayer.setId(seq);
                 soccerPlayer.setName("선수" + seq);
 
-                transactionChildService.insertSupports(soccerPlayer);
+                transactionPropagationTestChildService.insertSupports(soccerPlayer);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -58,28 +58,28 @@ public class TransactionService {
     public void mandatory() {
         SoccerPlayer player1 = new SoccerPlayer();
         player1.setName("손흥민");
-        transactionChildService.insertMandatory(player1);
+        transactionPropagationTestChildService.insertMandatory(player1);
     }
 
     @Transactional
     public void never() {
         SoccerPlayer player1 = new SoccerPlayer();
         player1.setName("손흥민");
-        transactionChildService.insertNever(player1);
+        transactionPropagationTestChildService.insertNever(player1);
     }
 
     @Transactional
     public void notSupported() {
         SoccerPlayer player1 = new SoccerPlayer();
         player1.setName("손흥민");
-        transactionChildService.insertNotSupported(player1);
+        transactionPropagationTestChildService.insertNotSupported(player1);
     }
 
     @Transactional
     public void nested() {
         SoccerPlayer player1 = new SoccerPlayer();
         player1.setName("손흥민");
-        transactionChildService.insertNested(player1);
+        transactionPropagationTestChildService.insertNested(player1);
 
         SoccerPlayer player2 = new SoccerPlayer();
         player2.setName("박지성");
@@ -90,7 +90,7 @@ public class TransactionService {
     public void requiresNew() {
         SoccerPlayer player1 = new SoccerPlayer();
         player1.setName("손흥민");
-        transactionChildService.insertRequiresNew(player1);
+        transactionPropagationTestChildService.insertRequiresNew(player1);
 
         SoccerPlayer player2 = new SoccerPlayer();
         player2.setName("박지성");

@@ -6,15 +6,9 @@ logging:
     org.springframework.transaction: DEBUG
 
 spring:
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/jpa
-    username: postgres
-    password: 123qwe@@
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
 
 keencho:
   p6spy:

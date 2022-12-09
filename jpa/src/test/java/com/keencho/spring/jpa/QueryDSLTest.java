@@ -1,20 +1,14 @@
 package com.keencho.spring.jpa;
 
-import com.keencho.spring.jpa.querydsl.Q;
-import com.keencho.spring.jpa.querydsl.dto.DeliveryDTO;
-import com.keencho.spring.jpa.querydsl.dto.KcQDeliveryDTO;
-import com.keencho.spring.jpa.querydsl.dto.KcQDeliveryHistoryDTO;
-import com.keencho.spring.jpa.querydsl.dto.KcQSimpleDTO;
-import com.keencho.spring.jpa.querydsl.model.Delivery;
-import com.keencho.spring.jpa.querydsl.model.DeliveryHistory;
-import com.keencho.spring.jpa.querydsl.model.Order;
-import com.keencho.spring.jpa.querydsl.repository.DeliveryHistoryRepository;
-import com.keencho.spring.jpa.querydsl.repository.DeliveryRepository;
-import com.keencho.spring.jpa.querydsl.repository.OrderRepository;
+import com.keencho.spring.jpa.dto.SoccerPlayerDTO;
+import com.keencho.spring.jpa.model.Q;
+import com.keencho.spring.jpa.model.QSoccerPlayer;
+import com.keencho.spring.jpa.model.SoccerPlayer;
+import com.keencho.spring.jpa.model.SoccerTeam;
+import com.keencho.spring.jpa.repository.SoccerPlayerRepository;
+import com.keencho.spring.jpa.repository.SoccerTeamRepository;
 import com.keencho.spring.jpa.utils.FakerUtils;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Expression;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,134 +17,73 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.QSort;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.FlushModeType;
+import javax.persistence.PersistenceUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
+/**
+ * QueryDSL 테스트
+ */
 @SpringBootTest
-@Transactional
 public class QueryDSLTest {
 
     @Autowired
-    DeliveryRepository deliveryRepository;
+    SoccerTeamRepository soccerTeamRepository;
 
     @Autowired
-    OrderRepository orderRepository;
+    SoccerPlayerRepository soccerPlayerRepository;
 
-    @Autowired
-    DeliveryHistoryRepository deliveryHistoryRepository;
+    @PersistenceUnit
+    EntityManagerFactory emf;
 
     Random rand = new Random();
 
+    QSoccerPlayer q = Q.soccerPlayer;
+
     @BeforeEach
     public void initData() {
-        var orderList = new ArrayList<Order>();
+        var soccerTeamList = new ArrayList<SoccerTeam>();
 
-        for (long i = 1; i <= 5; i ++) {
-            var order = new Order();
-            order.setOrderId(i);
-            var o = orderRepository.save(order);
+        for (var i = 0; i < 5; i ++) {
+            var st = new SoccerTeam();
+            st.setName(FakerUtils.teamName());
+            soccerTeamRepository.save(st);
 
-            orderList.add(o);
+            soccerTeamList.add(st);
         }
 
-        for (long i = 1; i <= 100; i ++) {
-            var delivery = new Delivery();
-            delivery.setDeliveryId(i);
+        for (var i = 0; i < 100; i ++) {
+            var sp = new SoccerPlayer();
+            sp.setName(FakerUtils.name());
+            sp.setSoccerTeam(soccerTeamList.get(rand.nextInt(soccerTeamList.size())));
+            sp.setHeight(i);
+            sp.setWeight(200 - i);
 
-            delivery.setFromName(FakerUtils.name());
-            delivery.setFromNumber(FakerUtils.phoneNumber());
-            delivery.setFromAddress(FakerUtils.address());
-
-            delivery.setToName(FakerUtils.name());
-            delivery.setToNumber(FakerUtils.phoneNumber());
-            delivery.setToAddress(FakerUtils.address());
-
-            delivery.setOrder(orderList.get(rand.nextInt(orderList.size())));
-
-            var d = deliveryRepository.save(delivery);
-
-            var deliveryHistory1 = new DeliveryHistory();
-            deliveryHistory1.setDeliveryId(d.getDeliveryId());
-            deliveryHistory1.setText("[생성] 배송이 생성되었습니다.");
-
-            deliveryHistoryRepository.save(deliveryHistory1);
-
-            var deliveryHistory2 = new DeliveryHistory();
-            deliveryHistory2.setDeliveryId(d.getDeliveryId());
-            deliveryHistory2.setText("[배차] 배송이 배차되었습니다.");
-
-            deliveryHistoryRepository.save(deliveryHistory2);
+            soccerPlayerRepository.save(sp);
         }
     }
 
     @Test
-    public void queryTest() {
-        var q = Q.delivery;
+    @Transactional
+    public void 조회_projection() {
+        var bb = new BooleanBuilder();
 
-        var deliveryDTO = new KcQDeliveryDTO();
-        deliveryDTO.setFromAddress(q.fromAddress);
-        deliveryDTO.setFromName(q.fromName);
-        deliveryDTO.setFromNumber(q.fromNumber);
+        bb.and(q.name.containsIgnoreCase("h"));
 
-        var simpleDTO = KcQSimpleDTO.builder()
-                .orderId(q.order.orderId)
-                .deliveryId(q.deliveryId)
-                .deliveryDTO(deliveryDTO.build())
-                .build();
+        var res = soccerPlayerRepository.selectList(bb, SoccerPlayerDTO.bindings, SoccerPlayerDTO.queryHandler);
 
-        var sort = new QSort(q.order.orderId.asc(), q.deliveryId.desc());
-
-        var list = deliveryRepository.selectList(null, simpleDTO, null, sort);
-
-        System.out.println(list.size());
+        Assert.isTrue(!res.isEmpty(), "result must not empty!");
     }
 
     @Test
-    public void queryHandlerTest() {
-        var q = Q.deliveryHistory;
-        var dq = Q.delivery;
-
-        var dDTO = KcQDeliveryDTO.builder()
-                .fromAddress(dq.fromAddress)
-                .fromName(dq.fromName)
-                .build();
-
-        var dto = KcQDeliveryHistoryDTO.builder()
-                .id(q.id)
-                .text(q.text)
-                .deliveryDTO(dDTO.build())
-                .build();
-
-        var predicate = new BooleanBuilder();
-        predicate.and(dq.fromName.startsWith("김"));
-
-        var list = deliveryHistoryRepository
-                .selectList(
-                        null,
-                        dto,
-                        (query) -> query.leftJoin(dq).on(dq.deliveryId.eq(q.deliveryId))
-                );
-    }
-
-    @Test
-    public void pagingTest() {
-        var q = Q.deliveryHistory;
-        var dq = Q.delivery;
-
-        var dDTO = KcQDeliveryDTO.builder()
-                .fromAddress(dq.fromAddress)
-                .fromName(dq.fromName)
-                .build();
-
-        var dto = KcQDeliveryHistoryDTO.builder()
-                .id(q.id)
-                .text(q.text)
-                .deliveryDTO(dDTO.build())
-                .build();
-
-        var list = deliveryHistoryRepository.selectPage(null, dto, new Pageable() {
+    @Transactional
+    public void 조회_페이징() {
+        var list = soccerPlayerRepository.selectPage(null, SoccerPlayerDTO.bindings, new Pageable() {
             @Override
             public int getPageNumber() {
                 return 0;
@@ -195,26 +128,8 @@ public class QueryDSLTest {
             public boolean hasPrevious() {
                 return false;
             }
-        }, (query) -> query.leftJoin(dq).on(dq.deliveryId.eq(q.deliveryId)));
+        }, SoccerPlayerDTO.queryHandler);
 
-        System.out.println(list);
-    }
-
-    @Test
-    public void mapBindingTest() {
-        var q = Q.delivery;
-        var bindings = new HashMap<String, Expression<?>>();
-
-        bindings.put("fromName", q.fromName);
-        bindings.put("fromNumber", q.fromNumber);
-        bindings.put("fromAddress", q.fromAddress);
-
-        bindings.put("toName", q.toName);
-        bindings.put("toNumber", q.toNumber);
-        bindings.put("toAddress", q.toAddress);
-
-        var list = deliveryRepository.selectList(null, DeliveryDTO.class, bindings);
-
-        Assertions.assertFalse(list.isEmpty());
+        Assert.isTrue(list.getContent().size() == 10, "size of content must be 10");
     }
 }
