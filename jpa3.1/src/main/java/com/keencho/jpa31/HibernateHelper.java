@@ -3,6 +3,7 @@ package com.keencho.jpa31;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.PersistenceUnit;
 import lombok.Getter;
 
 public class HibernateHelper {
