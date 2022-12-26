@@ -18,8 +18,7 @@ test {
 }
 
 dependencies {
-    implementation 'org.hibernate.orm:hibernate-core:6.1.6.Final'
-    implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+    implementation 'org.hibernate.orm:hibernate-core:6.2.0.CR1'
     implementation 'com.h2database:h2:2.1.214'
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.19.0'
 

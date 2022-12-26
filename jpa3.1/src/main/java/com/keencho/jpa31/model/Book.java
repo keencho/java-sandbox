@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -19,10 +21,13 @@ public class Book {
     private UUID id;
 
     private String title;
-    private int totalPages;
+    private int pages;
 
-    public Book(String title, int totalPages) {
-        this.title = title;
-        this.totalPages = totalPages;
-    }
+    // 판매율 (소수점)
+    private BigDecimal sellingRates;
+    // 분류기호 (소수점)
+    private BigDecimal classificationSymbol;
+
+    // 발매일
+    private LocalDateTime releaseDateTime;
 }
