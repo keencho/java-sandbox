@@ -167,16 +167,6 @@ public class JPA31Test {
         // https://github.com/jakartaee/persistence/issues/315
         // https://github.com/jakartaee/persistence/pull/362
 
-//        select
-//        b1_0.title,
-//        case b1_0.title
-//                when 'Effective Java' then true
-//            else cast(? as boolean)
-//        end
-//                from
-//        Book b1_0
-//        [TRACE] 2022-12-26 19:21:15.397 [Test worker] bind - binding parameter [1] as [BOOLEAN] - [false]
-
         var list = HibernateHelper.list(
                 Book.class,
                 (cb, root) -> root.get("title"),
@@ -193,5 +183,19 @@ public class JPA31Test {
     }
 
     // Adds missing definition of single_valued_embeddable_object_field in Jakarta Persistence QL BNF
-    // https://github.com/jakartaee/persistence/issues/307
+    // https://github.com/jakartaee/persistence/pull/331
+
+    // Clarifies mixing types of query input parameters
+    // https://github.com/jakartaee/persistence/pull/341
+
+    // Clarifies definition of the Basic type
+    // https://github.com/jakartaee/persistence/pull/335/files/a3a1ba0a6a7a9ca8b96431e5dd45035b5719ac9d
+
+    // Clarifies the order of parameters in the LOCATE function
+    // https://github.com/jakartaee/persistence/pull/347
+
+    // Clarifies SqlResultSetMapping with multiple EntityResults and conflicting aliases
+    // http://github.com/jakartaee/persistence/pulls?q=sqlresultsetmapping
+
+
 }
