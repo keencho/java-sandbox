@@ -1,6 +1,5 @@
 import com.keencho.jpa31.HibernateHelper;
 import com.keencho.jpa31.model.Book;
-import org.hibernate.Hibernate;
 import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
@@ -162,14 +161,37 @@ public class JPA31Test {
 
     }
 
-//    @Test
-//    @DisplayName("new criteria case expressions")
-//    void testCriteriaCaseExpressions() {
-//        var now = LocalDateTime.now();
-//        var firstResult = HibernateHelper.list(
-//                Book.class,
-//                (cb, root) -> cb.selectCase(root.get("title"))
-//                        .when(root.get("title"), "df")
-//        );
-//    }
+    @Test
+    @DisplayName("new criteria simple case expressions")
+    void testCriteriaCaseExpressions() {
+        // https://github.com/jakartaee/persistence/issues/315
+        // https://github.com/jakartaee/persistence/pull/362
+
+//        select
+//        b1_0.title,
+//        case b1_0.title
+//                when 'Effective Java' then true
+//            else cast(? as boolean)
+//        end
+//                from
+//        Book b1_0
+//        [TRACE] 2022-12-26 19:21:15.397 [Test worker] bind - binding parameter [1] as [BOOLEAN] - [false]
+
+        var list = HibernateHelper.list(
+                Book.class,
+                (cb, root) -> root.get("title"),
+                (cb, root) -> cb.selectCase(root.get("title"))
+                        .when(cb.literal("Effective Java"), cb.literal(true))
+                        .otherwise(false)
+        );
+
+        System.out.println("\n\n");
+
+        list.forEach(item -> System.out.println("title: " + item.get(0) + " / title is 'Effective Java'?: " + item.get(1)));
+
+        System.out.println("\n\n");
+    }
+
+    // Adds missing definition of single_valued_embeddable_object_field in Jakarta Persistence QL BNF
+    // https://github.com/jakartaee/persistence/issues/307
 }
