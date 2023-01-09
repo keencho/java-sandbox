@@ -1,11 +1,11 @@
 package com.keencho.spring.jpa.config;
 
 import com.keencho.spring.jpa.listeners.SimpleEventListeners;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;

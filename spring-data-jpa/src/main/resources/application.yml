@@ -9,8 +9,3 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-
-keencho:
-  p6spy:
-    start_package: com.keencho
-    limit_stack_trace: 10

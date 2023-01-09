@@ -9,6 +9,8 @@ import com.keencho.spring.jpa.repository.SoccerPlayerRepository;
 import com.keencho.spring.jpa.repository.SoccerTeamRepository;
 import com.keencho.spring.jpa.utils.FakerUtils;
 import com.querydsl.core.BooleanBuilder;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.PersistenceUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,6 @@ import org.springframework.data.querydsl.QSort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.FlushModeType;
-import javax.persistence.PersistenceUnit;
 import java.util.ArrayList;
 import java.util.Random;
 

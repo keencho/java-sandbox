@@ -1,12 +1,11 @@
 package com.keencho.spring.jpa.model;
 
 import com.keencho.spring.jpa.listeners.SoccerPlayerListeners;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 @Entity
 @Data

@@ -1,12 +1,9 @@
 package com.keencho.spring.jpa.listeners;
 
 import com.keencho.spring.jpa.model.SoccerTeam;
-import com.keencho.spring.jpa.repository.SoccerPlayerRepository;
 import com.keencho.spring.jpa.repository.SoccerTeamRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.PrePersist;
 import org.springframework.stereotype.Component;
-
-import javax.persistence.PrePersist;
 
 @Component
 public class SoccerTeamListeners implements SimpleEventListeners {

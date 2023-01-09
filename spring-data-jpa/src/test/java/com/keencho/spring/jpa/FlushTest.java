@@ -2,6 +2,7 @@ package com.keencho.spring.jpa;
 
 import com.keencho.spring.jpa.model.SoccerPlayer;
 import com.keencho.spring.jpa.repository.SoccerTeamRepository;
+import jakarta.persistence.*;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.junit.jupiter.api.Test;
@@ -9,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
-import javax.persistence.*;
 
 /**
  * 저장, 조회시 Flush Mode가 순서에 끼치는 영향 테스트
