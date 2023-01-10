@@ -2,7 +2,6 @@ plugins {
     id 'org.springframework.boot' version '3.0.1'
     id 'io.spring.dependency-management' version '1.0.13.RELEASE'
     id 'java'
-    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
 }
 
 group = 'sycho.spring'
@@ -15,49 +14,27 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.keencho:lib-spring:2.0.0'
+//    implementation project(path: ':lib-spring', configuration: 'default')
+//    annotationProcessor project(path: ':lib-spring', configuration: 'default')
+    implementation 'com.github.keencho:lib-spring:2.0.2'
 
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'com.h2database:h2:1.4.200'
     implementation 'net.datafaker:datafaker:1.5.0'
 
-    annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
     implementation 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
 
-    annotationProcessor 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'com.github.keencho:lib-spring:2.0.2'
+    annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jakarta")
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+compileJava {
+
 }
 
 test {
     useJUnitPlatform()
 }
-
-// querydsl
-def querydslDir = "$buildDir/generated/querydsl"
-
-querydsl {
-    querydslSourcesDir = querydslDir
-}
-
-sourceSets {
-    main.java.srcDir querydslDir
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-
-    querydsl.extendsFrom compileClasspath
-}
-
-compileQuerydsl {
-    options.annotationProcessorPath = configurations.querydsl
-
-    doFirst {
-        options.compilerArgs = ['-proc:only', '-processor', 'com.keencho.lib.spring.jpa.querydsl.KcQuerydslAnnotationProcessor']
-    }
-}
-// querydsl

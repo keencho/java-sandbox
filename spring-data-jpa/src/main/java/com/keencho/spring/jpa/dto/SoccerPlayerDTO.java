@@ -3,12 +3,8 @@ package com.keencho.spring.jpa.dto;
 import com.keencho.lib.spring.jpa.querydsl.KcQueryHandler;
 import com.keencho.lib.spring.jpa.querydsl.annotation.KcQueryProjection;
 import com.keencho.spring.jpa.model.Q;
-import com.querydsl.core.types.Expression;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Data
 @NoArgsConstructor
