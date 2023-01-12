@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(value = SoccerTeamListeners.class)
+//@EntityListeners(value = SoccerTeamListeners.class)
 @Table(name = "soccer_team")
 public class SoccerTeam {
 
@@ -20,4 +20,8 @@ public class SoccerTeam {
     Long id;
 
     String name;
+
+    public SoccerTeam(String name) {
+        this.name = name;
+    }
 }
