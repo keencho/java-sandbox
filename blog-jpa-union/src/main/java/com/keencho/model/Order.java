@@ -1,11 +1,10 @@
-package com.keencho.querydsl.model;
+package com.keencho.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -13,8 +12,8 @@ import java.util.UUID;
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long id;
 
     @Enumerated(EnumType.STRING)
     protected OrderStatus status;
@@ -31,4 +30,5 @@ public class Order {
     protected int itemPrice;
 
     protected LocalDateTime createdDateTime;
+
 }
