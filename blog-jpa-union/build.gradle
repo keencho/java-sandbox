@@ -12,7 +12,7 @@ repositories {
 dependencies {
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.5.1'
 
-    implementation 'org.hibernate.orm:hibernate-core:6.2.0.CR1'
+    implementation 'org.hibernate.orm:hibernate-core:6.1.6.Final'
 
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.19.0'
 
@@ -21,10 +21,14 @@ dependencies {
     annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
     annotationProcessor 'jakarta.persistence:jakarta.persistence-api:3.1.0'
 
+    implementation 'com.blazebit:blaze-persistence-integration-querydsl-expressions-jakarta:1.6.8'
+    implementation 'com.blazebit:blaze-persistence-integration-hibernate-6.0:1.6.8'
+
     implementation 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test:3.0.1'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
