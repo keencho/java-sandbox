@@ -7,6 +7,7 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <class>com.keencho.model.Order</class>
+        <class>com.keencho.model.OrderCTE</class>
         <class>com.keencho.model.Order_2206</class>
         <class>com.keencho.model.Order_2209</class>
         <class>com.keencho.model.Order_2301</class>
@@ -20,6 +21,7 @@
             <property name="hibernate.connection.password" value="123qwe@@"/>
             <property name="hibernate.connection.pool_size" value="5"/>
 
+            <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.hbm2ddl.auto" value="create"/>
             <property name="hibernate.max_fetch_depth" value="5"/>

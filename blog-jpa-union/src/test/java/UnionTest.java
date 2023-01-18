@@ -2,11 +2,13 @@ import com.blazebit.persistence.Criteria;
 import com.blazebit.persistence.CriteriaBuilderFactory;
 import com.blazebit.persistence.querydsl.BlazeJPAQuery;
 import com.blazebit.persistence.querydsl.BlazeJPAQueryFactory;
+import com.blazebit.persistence.querydsl.JPQLNextExpressions;
 import com.keencho.model.*;
 import com.keencho.utils.DataGenerator;
-import com.querydsl.core.annotations.QueryProjection;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.sql.JPASQLQuery;
 import com.querydsl.sql.PostgreSQLTemplates;
+import com.querydsl.sql.SQLExpressions;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -22,6 +24,9 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -63,6 +68,8 @@ public class UnionTest {
 
     @BeforeAll
     public static void beforeAll() {
+        Logger.getLogger("org.hibernate").setLevel(Level.OFF);
+
         entityManagerFactory = Persistence.createEntityManagerFactory("pu");
         entityManager = entityManagerFactory.createEntityManager();
         hibernateCriteriaBuilder = entityManager.unwrap(Session.class).getCriteriaBuilder();
@@ -192,32 +199,70 @@ public class UnionTest {
     @Test
     @DisplayName("QueryDSL Blaze Persistence Integration")
     void queryDSLBlazePersistenceIntegration() {
-        var q = QOrder.order;
+        var q = QOrderCTE.orderCTE;
         var q1 = QOrder_2206.order_2206;
         var q2 = QOrder_2209.order_2209;
         var q3 = QOrder_2301.order_2301;
 
-        var qf = new BlazeJPAQueryFactory(entityManager, criteriaBuilderFactory);
+        var list = jpaQueryFactory()
+                .with(
+                        q,
+                        jpaQueryFactory().unionAll(
+                                JPQLNextExpressions
+                                        .select(
+                                                JPQLNextExpressions.bind(q.uniqueKey, JPQLNextExpressions.rowNumber()),
+                                                JPQLNextExpressions.bind(q.id, q1.id),
+                                                JPQLNextExpressions.bind(q.status, q1.status),
+                                                JPQLNextExpressions.bind(q.fromAddress, q1.fromAddress),
+                                                JPQLNextExpressions.bind(q.fromName, q1.fromName),
+                                                JPQLNextExpressions.bind(q.fromPhoneNumber, q1.fromPhoneNumber),
+                                                JPQLNextExpressions.bind(q.toAddress, q1.toAddress),
+                                                JPQLNextExpressions.bind(q.toName, q1.toName),
+                                                JPQLNextExpressions.bind(q.toPhoneNumber, q1.toPhoneNumber),
+                                                JPQLNextExpressions.bind(q.itemName, q1.itemName),
+                                                JPQLNextExpressions.bind(q.itemPrice, q1.itemPrice),
+                                                JPQLNextExpressions.bind(q.createdDateTime, q1.createdDateTime)
+                                        )
+                                        .from(q1),
+                                JPQLNextExpressions
+                                        .select(
+                                                JPQLNextExpressions.bind(q.uniqueKey, JPQLNextExpressions.rowNumber()),
+                                                JPQLNextExpressions.bind(q.id, q2.id),
+                                                JPQLNextExpressions.bind(q.status, q2.status),
+                                                JPQLNextExpressions.bind(q.fromAddress, q2.fromAddress),
+                                                JPQLNextExpressions.bind(q.fromName, q2.fromName),
+                                                JPQLNextExpressions.bind(q.fromPhoneNumber, q2.fromPhoneNumber),
+                                                JPQLNextExpressions.bind(q.toAddress, q2.toAddress),
+                                                JPQLNextExpressions.bind(q.toName, q2.toName),
+                                                JPQLNextExpressions.bind(q.toPhoneNumber, q2.toPhoneNumber),
+                                                JPQLNextExpressions.bind(q.itemName, q2.itemName),
+                                                JPQLNextExpressions.bind(q.itemPrice, q2.itemPrice),
+                                                JPQLNextExpressions.bind(q.createdDateTime, q2.createdDateTime)
+                                        )
+                                        .from(q2),
+                                JPQLNextExpressions
+                                        .select(
+                                                JPQLNextExpressions.bind(q.uniqueKey, JPQLNextExpressions.rowNumber()),
+                                                JPQLNextExpressions.bind(q.id, q3.id),
+                                                JPQLNextExpressions.bind(q.status, q3.status),
+                                                JPQLNextExpressions.bind(q.fromAddress, q3.fromAddress),
+                                                JPQLNextExpressions.bind(q.fromName, q3.fromName),
+                                                JPQLNextExpressions.bind(q.fromPhoneNumber, q3.fromPhoneNumber),
+                                                JPQLNextExpressions.bind(q.toAddress, q3.toAddress),
+                                                JPQLNextExpressions.bind(q.toName, q3.toName),
+                                                JPQLNextExpressions.bind(q.toPhoneNumber, q3.toPhoneNumber),
+                                                JPQLNextExpressions.bind(q.itemName, q3.itemName),
+                                                JPQLNextExpressions.bind(q.itemPrice, q3.itemPrice),
+                                                JPQLNextExpressions.bind(q.createdDateTime, q3.createdDateTime)
+                                        )
+                                        .from(q3)
+                        )
+                )
+                .select(q)
+                .from(q)
+                .lateral()
+                .fetch();
 
-        var t = criteriaBuilderFactory.create(entityManager, Order.class)
-                .select("toName").select("toAddress").select("itemPrice").select("itemName")
-                .from(Order_2206.class)
-                .unionAll()
-                .select("toName").select("toAddress").select("itemPrice").select("itemName")
-                .from(Order_2209.class)
-                .endSet()
-                .getResultList();
-        System.out.println(t);
-
-//        var l = qf.query().unionAll(
-//                qf
-//                        .select(q1.fromAddress, q1.toAddress)
-//                        .from(q1).fetchAll(),
-//                qf
-//                        .select(q2.fromAddress, q2.toAddress)
-//                        .from(q2).fetchAll()
-//                ).fetch();
-//
-//        System.out.println(l);
+        System.out.println(list.size());
     }
 }

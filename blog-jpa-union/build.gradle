@@ -15,6 +15,7 @@ dependencies {
     implementation 'org.hibernate.orm:hibernate-core:6.1.6.Final'
 
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.19.0'
+    testImplementation 'org.slf4j:slf4j-reload4j:2.0.6'
 
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     implementation 'com.querydsl:querydsl-sql:5.0.0'

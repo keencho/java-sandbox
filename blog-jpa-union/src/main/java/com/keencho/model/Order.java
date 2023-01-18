@@ -1,5 +1,6 @@
 package com.keencho.model;
 
+import com.blazebit.persistence.CTE;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
