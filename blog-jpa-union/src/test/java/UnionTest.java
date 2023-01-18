@@ -1,18 +1,17 @@
 import com.blazebit.persistence.Criteria;
 import com.blazebit.persistence.CriteriaBuilderFactory;
-import com.blazebit.persistence.querydsl.BlazeJPAQuery;
 import com.blazebit.persistence.querydsl.BlazeJPAQueryFactory;
 import com.blazebit.persistence.querydsl.JPQLNextExpressions;
 import com.keencho.model.*;
 import com.keencho.utils.DataGenerator;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.sql.JPASQLQuery;
 import com.querydsl.sql.PostgreSQLTemplates;
-import com.querydsl.sql.SQLExpressions;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import jakarta.persistence.Tuple;
 import org.hibernate.Session;
 import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import org.junit.jupiter.api.AfterAll;
@@ -24,7 +23,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -196,9 +194,33 @@ public class UnionTest {
         return new BlazeJPAQueryFactory(entityManager, criteriaBuilderFactory);
     }
 
+    private <T extends EntityPathBase<? extends Order>> Expression<?>[] binding(T targetQ) {
+        var q = QOrderCTE.orderCTE;
+
+        return new Expression[] {
+                JPQLNextExpressions.bind(q.id, Expressions.stringPath(targetQ, "id")),
+                JPQLNextExpressions.bind(q.status, Expressions.path(OrderStatus.class, "status")),
+                JPQLNextExpressions.bind(q.fromAddress, Expressions.stringPath(targetQ, "fromAddress")),
+                JPQLNextExpressions.bind(q.fromName, Expressions.stringPath(targetQ, "fromName")),
+                JPQLNextExpressions.bind(q.fromPhoneNumber, Expressions.stringPath(targetQ, "fromPhoneNumber")),
+                JPQLNextExpressions.bind(q.toAddress, Expressions.stringPath(targetQ, "toAddress")),
+                JPQLNextExpressions.bind(q.toName, Expressions.stringPath(targetQ, "toName")),
+                JPQLNextExpressions.bind(q.toPhoneNumber, Expressions.stringPath(targetQ, "toPhoneNumber")),
+                JPQLNextExpressions.bind(q.itemName, Expressions.stringPath(targetQ, "itemName")),
+                JPQLNextExpressions.bind(q.itemPrice, Expressions.path(Integer.class, "itemPrice")),
+                JPQLNextExpressions.bind(q.createdDateTime, Expressions.path(LocalDateTime.class, "createdDateTime"))
+        };
+    }
+
     @Test
     @DisplayName("QueryDSL Blaze Persistence Integration")
     void queryDSLBlazePersistenceIntegration() {
+        // @CTE가 붙은 클래스의 @Id는 유니크해야한다.
+        // a, b, c 클래스의 pk가 long 타입이라고 가정하고 pk가 1인 row가 세 테이블에 모두 존재하고 이를 union all 하면 뒤 b, c 테이블의 row는 조회되지 않는다.
+        // 아마 jpa id는 고유해야 하기 때문이 아닌가 싶다. 일단 long 타입이었던 pk를 varchar로 변경하였더니 모두다 조회된다.
+        // 아마 @Id가 붙은 엔티티는 고유해야하기 때문이 아닌가 싶은데 이건 좀더 찾아보자.
+        // TODO: 위 설명 검색
+
         var q = QOrderCTE.orderCTE;
         var q1 = QOrder_2206.order_2206;
         var q2 = QOrder_2209.order_2209;
@@ -209,58 +231,21 @@ public class UnionTest {
                         q,
                         jpaQueryFactory().unionAll(
                                 JPQLNextExpressions
-                                        .select(
-                                                JPQLNextExpressions.bind(q.uniqueKey, JPQLNextExpressions.rowNumber()),
-                                                JPQLNextExpressions.bind(q.id, q1.id),
-                                                JPQLNextExpressions.bind(q.status, q1.status),
-                                                JPQLNextExpressions.bind(q.fromAddress, q1.fromAddress),
-                                                JPQLNextExpressions.bind(q.fromName, q1.fromName),
-                                                JPQLNextExpressions.bind(q.fromPhoneNumber, q1.fromPhoneNumber),
-                                                JPQLNextExpressions.bind(q.toAddress, q1.toAddress),
-                                                JPQLNextExpressions.bind(q.toName, q1.toName),
-                                                JPQLNextExpressions.bind(q.toPhoneNumber, q1.toPhoneNumber),
-                                                JPQLNextExpressions.bind(q.itemName, q1.itemName),
-                                                JPQLNextExpressions.bind(q.itemPrice, q1.itemPrice),
-                                                JPQLNextExpressions.bind(q.createdDateTime, q1.createdDateTime)
-                                        )
-                                        .from(q1),
+                                        .select(binding(q1))
+                                        .from(q1)
+                                        .where(q1.toName.like("김%")),
                                 JPQLNextExpressions
-                                        .select(
-                                                JPQLNextExpressions.bind(q.uniqueKey, JPQLNextExpressions.rowNumber()),
-                                                JPQLNextExpressions.bind(q.id, q2.id),
-                                                JPQLNextExpressions.bind(q.status, q2.status),
-                                                JPQLNextExpressions.bind(q.fromAddress, q2.fromAddress),
-                                                JPQLNextExpressions.bind(q.fromName, q2.fromName),
-                                                JPQLNextExpressions.bind(q.fromPhoneNumber, q2.fromPhoneNumber),
-                                                JPQLNextExpressions.bind(q.toAddress, q2.toAddress),
-                                                JPQLNextExpressions.bind(q.toName, q2.toName),
-                                                JPQLNextExpressions.bind(q.toPhoneNumber, q2.toPhoneNumber),
-                                                JPQLNextExpressions.bind(q.itemName, q2.itemName),
-                                                JPQLNextExpressions.bind(q.itemPrice, q2.itemPrice),
-                                                JPQLNextExpressions.bind(q.createdDateTime, q2.createdDateTime)
-                                        )
+                                        .select(binding(q2))
                                         .from(q2),
                                 JPQLNextExpressions
-                                        .select(
-                                                JPQLNextExpressions.bind(q.uniqueKey, JPQLNextExpressions.rowNumber()),
-                                                JPQLNextExpressions.bind(q.id, q3.id),
-                                                JPQLNextExpressions.bind(q.status, q3.status),
-                                                JPQLNextExpressions.bind(q.fromAddress, q3.fromAddress),
-                                                JPQLNextExpressions.bind(q.fromName, q3.fromName),
-                                                JPQLNextExpressions.bind(q.fromPhoneNumber, q3.fromPhoneNumber),
-                                                JPQLNextExpressions.bind(q.toAddress, q3.toAddress),
-                                                JPQLNextExpressions.bind(q.toName, q3.toName),
-                                                JPQLNextExpressions.bind(q.toPhoneNumber, q3.toPhoneNumber),
-                                                JPQLNextExpressions.bind(q.itemName, q3.itemName),
-                                                JPQLNextExpressions.bind(q.itemPrice, q3.itemPrice),
-                                                JPQLNextExpressions.bind(q.createdDateTime, q3.createdDateTime)
-                                        )
+                                        .select(binding(q3))
                                         .from(q3)
+                                        .where(q3.itemPrice.goe(100000))
                         )
                 )
                 .select(q)
                 .from(q)
-                .lateral()
+                .where(q.status.ne(OrderStatus.FAILED))
                 .fetch();
 
         System.out.println(list.size());

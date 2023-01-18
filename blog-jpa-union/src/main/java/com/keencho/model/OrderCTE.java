@@ -13,9 +13,7 @@ import java.time.LocalDateTime;
 public class OrderCTE {
 
     @Id
-    Long uniqueKey;
-
-    Long id;
+    String id;
 
     @Enumerated(EnumType.STRING)
     OrderStatus status;

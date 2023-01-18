@@ -1,9 +1,9 @@
 package com.keencho.model;
 
-import com.blazebit.persistence.CTE;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 
@@ -13,8 +13,10 @@ import java.time.LocalDateTime;
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    @Column(nullable = false, length = 32)
+    String id;
 
     @Enumerated(EnumType.STRING)
     protected OrderStatus status;
