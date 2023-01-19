@@ -217,9 +217,8 @@ public class UnionTest {
     void queryDSLBlazePersistenceIntegration() {
         // @CTE가 붙은 클래스의 @Id는 유니크해야한다.
         // a, b, c 클래스의 pk가 long 타입이라고 가정하고 pk가 1인 row가 세 테이블에 모두 존재하고 이를 union all 하면 뒤 b, c 테이블의 row는 조회되지 않는다.
-        // 아마 jpa id는 고유해야 하기 때문이 아닌가 싶다. 일단 long 타입이었던 pk를 varchar로 변경하였더니 모두다 조회된다.
-        // 아마 @Id가 붙은 엔티티는 고유해야하기 때문이 아닌가 싶은데 이건 좀더 찾아보자.
-        // TODO: 위 설명 검색
+        // pk가 고유한 uuid 형태라면 정상적으로 합쳐진다.
+        // 실제 테이블이 아닐지라도 @Id 어노테이션이 붙은 필드는 유니크해야 하기 때문인 것으로 보인다.
 
         var q = QOrderCTE.orderCTE;
         var q1 = QOrder_2206.order_2206;
