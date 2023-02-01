@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.querydsl.QSort;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -90,36 +92,37 @@ class CustomJpaQueryDSLRepositoryTest {
     }
 
     @Test
+    @Transactional
     void selectList() {
+        // Custom Repository select
         var oq = QOrder.order;
         var cq = QCustomer.customer;
 
-        var orderList = orderRepository.selectList(
-                null,
+        var predicate = new BooleanBuilder();
+        predicate.and(oq.product.price.gt(3000L));
+
+        var customRepositorySelectList = orderRepository.selectList(
+                predicate,
                 OrderDTO.class,
                 this.buildBindings(),
                 query -> query.leftJoin(cq).on(cq.id.eq(oq.customerId)),
-                null
+                new QSort(oq.name.desc())
         );
 
-        Assertions.assertEquals(orderList.size(), 100);
-        Assertions.assertTrue(
-                orderList.stream().allMatch(order -> {
-                    if (!order.getCustomerName().contains("고객")) {
-                        return false;
-                    }
+        Assertions.assertTrue(customRepositorySelectList.stream().allMatch(order -> order.getProductPrice() > 3000L));
 
-                    if (!order.getName().contains("주문")) {
-                        return false;
-                    }
+        // Spring Data JPA Repository select
+        var jpaRepositorySelectList = orderRepository.findByProductPriceGreaterThanOrderByNameDesc(3000L);
 
-                    if (!order.getProductName().contains("상품")) {
-                        return false;
-                    }
+        for (var i = 0; i < customRepositorySelectList.size(); i ++) {
+            var customRepositoryItem = customRepositorySelectList.get(i);
+            var jpaRepositoryItem = jpaRepositorySelectList.get(i);
 
-                    return true;
-                })
-        );
+            Assertions.assertEquals(customRepositoryItem.getId(), jpaRepositoryItem.getId());
+            Assertions.assertEquals(customRepositoryItem.getName(), jpaRepositoryItem.getName());
+            Assertions.assertEquals(customRepositoryItem.getProductPrice(), jpaRepositoryItem.getProduct().getPrice());
+            Assertions.assertEquals(customRepositoryItem.getProductName(), jpaRepositoryItem.getProduct().getName());
+        }
     }
 
 }
