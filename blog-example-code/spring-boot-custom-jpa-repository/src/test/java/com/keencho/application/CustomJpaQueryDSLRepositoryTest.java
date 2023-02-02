@@ -13,18 +13,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.querydsl.QSort;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
+@Transactional
 class CustomJpaQueryDSLRepositoryTest {
 
     @Autowired
@@ -92,16 +91,96 @@ class CustomJpaQueryDSLRepositoryTest {
     }
 
     @Test
-    @Transactional
+    void findList() {
+
+        var targetProductNameContaining = "1";
+
+        // Custom Repository find
+        var oq = QOrder.order;
+        var cq = QCustomer.customer;
+
+        var predicate = new BooleanBuilder();
+        predicate.and(oq.product.name.contains(targetProductNameContaining));
+
+        var list1 = orderRepository.findList(predicate, query -> query.leftJoin(cq).on(cq.id.eq(oq.customerId)), null);
+
+        Assertions.assertTrue(list1.stream().allMatch(order -> order.getProduct().getName().contains(targetProductNameContaining)));
+
+        // Spring Data JPA Repository find
+        var list2 = orderRepository.findByProductNameContaining(targetProductNameContaining);
+
+        list1.sort(Comparator.comparing(Order::getName));
+        list2.sort(Comparator.comparing(Order::getName));
+
+        for (var i = 0 ; i < list1.size(); i ++) {
+            var item1 = list1.get(i);
+            var item2 = list2.get(i);
+
+            Assertions.assertEquals(item1.getId(), item2.getId());
+            Assertions.assertEquals(item1.getName(), item2.getName());
+            Assertions.assertEquals(item1.getProduct().getPrice(), item2.getProduct().getPrice());
+            Assertions.assertEquals(item1.getProduct().getName(), item2.getProduct().getName());
+        }
+    }
+
+    @Test
+    void findPage() {
+
+        var targetOrderNameContaining = "1";
+
+        var oq = QOrder.order;
+        var cq = QCustomer.customer;
+
+        var predicate = new BooleanBuilder();
+        predicate.and(oq.name.contains(targetOrderNameContaining));
+
+        var page = 0;
+        var number = 0;
+        while(true) {
+            var pageable = PageRequest.of(page, 3, new QSort(oq.product.price.desc(), oq.name.desc()));
+
+            var list1 = orderRepository.findPage(
+                    predicate,
+                    query -> query.leftJoin(cq).on(cq.id.eq(oq.customerId)),
+                    pageable
+            );
+
+            var list2 = orderRepository.findByNameContaining(targetOrderNameContaining, pageable);
+
+            var contents1 = list1.getContent();
+            var contents2 = list2.getContent();
+
+            for (var i = 0; i < contents1.size(); i ++) {
+                var item1 = contents1.get(i);
+                var item2 = contents2.get(i);
+
+                Assertions.assertEquals(item1.getId(), item2.getId());
+                Assertions.assertEquals(item1.getName(), item2.getName());
+                Assertions.assertEquals(item1.getProduct().getPrice(), item2.getProduct().getPrice());
+                Assertions.assertEquals(item1.getProduct().getName(), item2.getProduct().getName());
+            }
+
+            number += list1.getNumberOfElements();
+
+            if (number >= list1.getTotalElements()) break;
+
+            page ++;
+        }
+    }
+
+    @Test
     void selectList() {
+
+        var targetProductPrice = 3000L;
+
         // Custom Repository select
         var oq = QOrder.order;
         var cq = QCustomer.customer;
 
         var predicate = new BooleanBuilder();
-        predicate.and(oq.product.price.gt(3000L));
+        predicate.and(oq.product.price.gt(targetProductPrice));
 
-        var customRepositorySelectList = orderRepository.selectList(
+        var list1 = orderRepository.selectList(
                 predicate,
                 OrderDTO.class,
                 this.buildBindings(),
@@ -109,19 +188,65 @@ class CustomJpaQueryDSLRepositoryTest {
                 new QSort(oq.name.desc())
         );
 
-        Assertions.assertTrue(customRepositorySelectList.stream().allMatch(order -> order.getProductPrice() > 3000L));
+        Assertions.assertTrue(list1.stream().allMatch(order -> order.getProductPrice() > targetProductPrice));
 
         // Spring Data JPA Repository select
-        var jpaRepositorySelectList = orderRepository.findByProductPriceGreaterThanOrderByNameDesc(3000L);
+        var list2 = orderRepository.findByProductPriceGreaterThanOrderByNameDesc(targetProductPrice);
 
-        for (var i = 0; i < customRepositorySelectList.size(); i ++) {
-            var customRepositoryItem = customRepositorySelectList.get(i);
-            var jpaRepositoryItem = jpaRepositorySelectList.get(i);
+        for (var i = 0; i < list1.size(); i ++) {
+            var item1 = list1.get(i);
+            var item2 = list2.get(i);
 
-            Assertions.assertEquals(customRepositoryItem.getId(), jpaRepositoryItem.getId());
-            Assertions.assertEquals(customRepositoryItem.getName(), jpaRepositoryItem.getName());
-            Assertions.assertEquals(customRepositoryItem.getProductPrice(), jpaRepositoryItem.getProduct().getPrice());
-            Assertions.assertEquals(customRepositoryItem.getProductName(), jpaRepositoryItem.getProduct().getName());
+            Assertions.assertEquals(item1.getId(), item2.getId());
+            Assertions.assertEquals(item1.getName(), item2.getName());
+            Assertions.assertEquals(item1.getProductPrice(), item2.getProduct().getPrice());
+            Assertions.assertEquals(item1.getProductName(), item2.getProduct().getName());
+        }
+    }
+
+    @Test
+    void selectPage() {
+        var targetProductPrice = 5000L;
+
+        var oq = QOrder.order;
+        var cq = QCustomer.customer;
+
+        var predicate = new BooleanBuilder();
+        predicate.and(oq.product.price.gt(targetProductPrice));
+
+        var page = 0;
+        var number = 0;
+        while(true) {
+            var pageable = PageRequest.of(page, 3, new QSort(oq.product.price.desc(), oq.name.desc()));
+
+            var list1 = orderRepository.selectPage(
+                    predicate,
+                    OrderDTO.class,
+                    this.buildBindings(),
+                    query -> query.leftJoin(cq).on(cq.id.eq(oq.customerId)),
+                    pageable
+            );
+
+            var list2 = orderRepository.findByProductPriceGreaterThan(targetProductPrice, pageable);
+
+            var contents1 = list1.getContent();
+            var contents2 = list2.getContent();
+
+            for (var i = 0; i < contents1.size(); i ++) {
+                var item1 = contents1.get(i);
+                var item2 = contents2.get(i);
+
+                Assertions.assertEquals(item1.getId(), item2.getId());
+                Assertions.assertEquals(item1.getName(), item2.getName());
+                Assertions.assertEquals(item1.getProductPrice(), item2.getProduct().getPrice());
+                Assertions.assertEquals(item1.getProductName(), item2.getProduct().getName());
+            }
+
+            number += list1.getNumberOfElements();
+
+            if (number >= list1.getTotalElements()) break;
+
+            page ++;
         }
     }
 

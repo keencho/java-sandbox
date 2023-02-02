@@ -53,7 +53,7 @@ public class DefaultCustomJpaSearchQuery<T> implements CustomJpaSearchQuery<T> {
         }
 
         if (sort != null) {
-            // query dsl의 sort 객체와 아닌 경우 구분
+            // query dsl의 sort 객체인 경우와 아닌 경우 구분
             if (sort instanceof QSort qSort) {
                 query = query.orderBy(qSort.getOrderSpecifiers().toArray(new OrderSpecifier[0]));
             } else {
