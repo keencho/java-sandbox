@@ -3,14 +3,13 @@ package com.keencho.algorithm.정렬;
 import java.util.Arrays;
 
 /**
- * Selection Sort (선택 정렬)
+ * Insertion Sort (삽입 정렬)
  *
- * - O(n^2) 시간복잡도
- * - 현재 위치에 들어갈 데이터를 찾아 선택하는 알고리즘
- * - 정렬의 대상이 되는 데이터 외에 추가적인 공간을 필요로 하지 않음
- * - '불안정 졍렬'임
+ * - 현재 비교하고자 하는 타겟과 그 이전의 원소들과 비교하며 자리를 교환하는 정렬 방법
+ * - '안정 정렬'
  */
-public class 선택 {
+public class 삽입 {
+
     public static void main(String[] args) {
         var array = new int[31];
         Arrays.fill(array, -1);
@@ -45,23 +44,23 @@ public class 선택 {
     }
 
     private static void sort(int[] a, int size) {
-        // 마지막 인덱스룰 순회할때는 이미 가장 큰 값이 마지막 인덱스에 들어가 있을 것이므로 참조할 필요 없다.
-        for (var i = 0; i < size - 1; i ++) {
-            var idx = i;
 
-            for (var j = i + 1; j < size; j ++) {
-                if (a[j] < a[idx]) {
-                    idx = j;
-                }
+        // 0부터 시작할 필요가 없다.
+        for (var i = 1; i < size; i ++) {
+            var target = a[i];
+
+            var j = i - 1;
+
+            // 타켓이 이전 원소보다 크기 전 때까지 반복
+            while(j >= 0 && target < a[j]) {
+                a[j + 1] = a[j];
+                j--;
             }
 
-            swap(a, idx, i);
+            // 반복문에서 탈출하는 경우 앞의 원소가 타겟보다 작다는 것을 의미
+            // 타겟 원소는 j 번째 원소 뒤에 와야함
+            // 따라서 타겟은 j + 1 에 위치하게 된다.
+            a[j + 1] = target;
         }
-    }
-
-    private static void swap(int[] a, int i, int j) {
-        int temp = a[i];
-        a[i] = a[j];
-        a[j] = temp;
     }
 }
