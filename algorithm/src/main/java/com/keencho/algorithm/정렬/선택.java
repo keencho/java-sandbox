@@ -1,5 +1,7 @@
 package com.keencho.algorithm.정렬;
 
+import com.keencho.algorithm.utils.Utils;
+
 import java.util.Arrays;
 
 /**
@@ -12,22 +14,7 @@ import java.util.Arrays;
  */
 public class 선택 {
     public static void main(String[] args) {
-        var array = new int[31];
-        Arrays.fill(array, -1);
-
-        for (var i = 0; i < array.length; i ++) {
-            int t = -1;
-
-            while (true) {
-                int finalT = t;
-                if (Arrays.stream(array).noneMatch(v -> v == finalT)) {
-                    break;
-                }
-
-                t = (int) (Math.random() * 100);
-            }
-            array[i] = t;
-        }
+        var array = Utils.dummyArray(31, 100, false);
 
         System.out.println("전");
         for (var i : array) {

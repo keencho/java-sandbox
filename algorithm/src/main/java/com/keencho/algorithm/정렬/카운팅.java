@@ -1,5 +1,7 @@
 package com.keencho.algorithm.정렬;
 
+import com.keencho.algorithm.utils.Utils;
+
 /**
  * Counting Sort (계수 정렬 / 카운팅 정렬)
  *
@@ -12,9 +14,9 @@ package com.keencho.algorithm.정렬;
 public class 카운팅 {
 
     public static void main(String[] args) {
-        var array = new int[100];       // 수열의 원소: 100개
-        var counting = new int[31];     // 수의 범위: 0 ~ 30
-        var result = new int[100];      // 정렬 결과 배열
+        var array = Utils.dummyArray(100, 31, true);    // 수열의 원소: 100개
+        var counting = new int[31];                                                 // 수의 범위: 0 ~ 30
+        var result = new int[100];                                                  // 정렬 결과 배열
 
         for (var i = 0; i < array.length; i ++) {
             array[i] = (int)(Math.random() * 31); // 0 ~ 30 사이의 값을 랜덤으로 배열에 할당
