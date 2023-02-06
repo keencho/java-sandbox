@@ -2,8 +2,6 @@ package com.keencho.algorithm.정렬;
 
 import com.keencho.algorithm.utils.Utils;
 
-import java.util.Arrays;
-
 /**
  * Insertion Sort (삽입 정렬)
  *

@@ -3,14 +3,13 @@ package com.keencho.algorithm.정렬;
 import com.keencho.algorithm.utils.Utils;
 
 /**
- * Selection Sort (선택 정렬)
+ * Bubble Sort (거품 정렬)
  *
- * - O(n^2) 시간복잡도
- * - 현재 위치에 들어갈 데이터를 찾아 선택하는 알고리즘
- * - 정렬의 대상이 되는 데이터 외에 추가적인 공간을 필요로 하지 않음
- * - '불안정 졍렬'임
+ * - 두 개의 인접한 원소를 비교하여 정렬하는 알고리즘
+ * - O(N^2) 의 복잡도
+ * - 안정졍렬
  */
-public class 선택 {
+public class 거품 {
     public static void main(String[] args) {
         var array = Utils.dummyArray(31, 100, false);
 
@@ -27,25 +26,26 @@ public class 선택 {
             System.out.print(i + " ");
         }
         System.out.println();
+
     }
 
     private static void sort(int[] a, int size) {
-        // 마지막 인덱스룰 순회할때는 이미 가장 큰 값이 마지막 인덱스에 들어가 있을 것이므로 참조할 필요 없다.
-        for (var i = 0; i < size - 1; i ++) {
-            var idx = i;
+        for (var i = 1; i < size; i ++) {
+            var swap = false;
 
-            for (var j = i + 1; j < size; j ++) {
-                if (a[j] < a[idx]) {
-                    idx = j;
+            for (var j = 0; j < size - i; j ++) {
+                if (a[j] > a[j + 1]) {
+                    swap(a, j , j + 1);
+                    swap = true;
                 }
             }
 
-            swap(a, idx, i);
+            if (!swap) break;
         }
     }
 
     private static void swap(int[] a, int i, int j) {
-        int temp = a[i];
+        var temp = a[i];
         a[i] = a[j];
         a[j] = temp;
     }
