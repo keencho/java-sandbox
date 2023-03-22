@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.keencho.dto.QOrderAggregationDTO;
 import com.keencho.model.Order;
 import com.keencho.model.QOrder;
@@ -77,10 +79,23 @@ public class JsonbTest {
     @Test
     @DisplayName("NATIVE QUERY JSONB 조건 테스트 (version < 6.2)")
     public void jsonbNativeQueryCondition() {
+        var mapper = new ObjectMapper();
+
         var orderList = entityManager
                 .createNativeQuery("SELECT * FROM order_new o WHERE o.frominfo ->> 'name' LIKE :name ")
                 .setParameter("name", "김%")
                 .getResultList();
+
+        orderList.forEach(item -> {
+            try {
+                var fromInfo = mapper.readValue(((Object[]) item)[1].toString(), ShippingInfo.class);
+
+                Assertions.assertTrue(fromInfo.getName().startsWith("김"));
+
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Test
@@ -110,7 +125,7 @@ public class JsonbTest {
                 .orderBy(count.desc())
                 .fetch();
 
-        list.forEach(item -> System.out.printf("성: %s / 갯수: %d개%n", item.getLastName(), item.getCount()));
+        list.forEach(item -> Assertions.assertFalse(item.getLastName().startsWith("김")));
 
     }
 }
