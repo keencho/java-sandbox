@@ -1,4 +1,4 @@
-package com.keencho.algorithm.utils;
+package com.keencho.algorithm.common.utils;
 
 import java.util.Arrays;
 

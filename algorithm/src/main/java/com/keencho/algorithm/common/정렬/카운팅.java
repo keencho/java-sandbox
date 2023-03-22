@@ -1,6 +1,6 @@
-package com.keencho.algorithm.정렬;
+package com.keencho.algorithm.common.정렬;
 
-import com.keencho.algorithm.utils.Utils;
+import com.keencho.algorithm.common.utils.Utils;
 
 /**
  * Counting Sort (계수 정렬 / 카운팅 정렬)

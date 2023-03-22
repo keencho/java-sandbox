@@ -1,6 +1,6 @@
-package com.keencho.algorithm.정렬;
+package com.keencho.algorithm.common.정렬;
 
-import com.keencho.algorithm.utils.Utils;
+import com.keencho.algorithm.common.utils.Utils;
 
 /**
  * Heap Sort (힙 정렬)

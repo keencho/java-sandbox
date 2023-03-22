@@ -1,6 +1,6 @@
-package com.keencho.algorithm.정렬;
+package com.keencho.algorithm.common.정렬;
 
-import com.keencho.algorithm.utils.Utils;
+import com.keencho.algorithm.common.utils.Utils;
 
 /**
  * Insertion Sort (삽입 정렬)
