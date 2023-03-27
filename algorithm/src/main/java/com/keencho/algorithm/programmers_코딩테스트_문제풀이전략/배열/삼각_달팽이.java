@@ -1,4 +1,4 @@
-package com.keencho.algorithm.programmers.배열;
+package com.keencho.algorithm.programmers_코딩테스트_문제풀이전략.배열;
 
 // p.72
 // 개량 ver --> https://github.com/gilbutITbook/080337/blob/main/3%EC%9E%A5/%EC%82%BC%EA%B0%81_%EB%8B%AC%ED%8C%BD%EC%9D%B4_%EA%B0%9C%EB%9F%89.java

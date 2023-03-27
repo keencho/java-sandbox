@@ -1,4 +1,4 @@
-package com.keencho.algorithm.programmers.배열;
+package com.keencho.algorithm.programmers_코딩테스트_문제풀이전략.배열;
 
 // p.86
 // P: 사람

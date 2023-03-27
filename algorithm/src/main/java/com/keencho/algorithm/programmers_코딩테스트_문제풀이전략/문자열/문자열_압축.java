@@ -1,4 +1,4 @@
-package com.keencho.algorithm.programmers.문자열;
+package com.keencho.algorithm.programmers_코딩테스트_문제풀이전략.문자열;
 
 import java.util.ArrayList;
 

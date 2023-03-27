@@ -1,4 +1,4 @@
-package com.keencho.algorithm.programmers.재귀;
+package com.keencho.algorithm.programmers_코딩테스트_문제풀이전략.재귀;
 
 // p.162
 // https://school.programmers.co.kr/learn/courses/30/lessons/68936

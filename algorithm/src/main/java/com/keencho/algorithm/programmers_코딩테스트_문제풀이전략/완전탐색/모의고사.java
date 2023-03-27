@@ -1,4 +1,4 @@
-package com.keencho.algorithm.programmers.완전탐색;
+package com.keencho.algorithm.programmers_코딩테스트_문제풀이전략.완전탐색;
 
 import java.util.stream.IntStream;
 
