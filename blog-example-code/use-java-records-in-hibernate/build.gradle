@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.hibernate.orm:hibernate-core:6.2.0.Final'
+    annotationProcessor 'org.hibernate.orm:hibernate-jpamodelgen:6.2.0.Final'
+    implementation 'com.h2database:h2:2.1.214'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+sourceSets.main.java.srcDirs += "${buildDir}/generated"
+
+compileJava {
+    doFirst {
+        clean
+    }
+    options.annotationProcessorGeneratedSourcesDirectory = file("${buildDir}/generated")
+}
