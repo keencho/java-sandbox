@@ -1,22 +1,29 @@
 package com.keencho.algorithm.programmers;
 
-import com.keencho.algorithm.programmers.랜덤.인사고과;
+import com.keencho.algorithm.programmers.랜덤.대충_만든_자판;
+import com.keencho.algorithm.programmers.랜덤.연속된_부분_수열의_합;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        var q = new 인사고과();
+//        var q = new 연속된_부분_수열의_합();
+//
+//        var p1 = new int[] { 2, 2, 2, 2, 2};
+//        var p2 = 6;
+//
+//        var res = q.solution(p1, p2);
+//
+//        for (int re : res) {
+//            System.out.println(re);
+//        }
 
-        var p = new int[][] {
-                new int[] { 2, 2 },
-                new int[] { 1, 4 },
-                new int[] { 3, 2 },
-                new int[] { 3, 2 },
-                new int[] { 2, 1 }
-        };
+        var q = new 대충_만든_자판();
 
-        var res = q.solution(p);
+        var p1 = new String[] { "ABACD", "BCEFD" };
+        var p2 = new String[] { "ABCD","AABB" };
+
+        q.solution(p1, p2);
     }
 
 }
