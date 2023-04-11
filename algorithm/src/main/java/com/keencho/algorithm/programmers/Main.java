@@ -1,29 +1,16 @@
 package com.keencho.algorithm.programmers;
 
-import com.keencho.algorithm.programmers.랜덤.대충_만든_자판;
-import com.keencho.algorithm.programmers.랜덤.연속된_부분_수열의_합;
+import com.keencho.algorithm.programmers.코딩테스트_문제풀이전략_책.동적_프로그래밍.등굣길;
 
 public class Main {
 
     public static void main(String[] args) {
 
-//        var q = new 연속된_부분_수열의_합();
-//
-//        var p1 = new int[] { 2, 2, 2, 2, 2};
-//        var p2 = 6;
-//
-//        var res = q.solution(p1, p2);
-//
-//        for (int re : res) {
-//            System.out.println(re);
-//        }
+        var q = new 등굣길();
 
-        var q = new 대충_만든_자판();
+        var res = q.solution(10, 10,  new int[][] { { 2, 2 } });
 
-        var p1 = new String[] { "ABACD", "BCEFD" };
-        var p2 = new String[] { "ABCD","AABB" };
-
-        q.solution(p1, p2);
+        System.out.println(res);
     }
 
 }
