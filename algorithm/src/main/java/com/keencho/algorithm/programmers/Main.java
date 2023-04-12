@@ -1,16 +1,16 @@
 package com.keencho.algorithm.programmers;
 
-import com.keencho.algorithm.programmers.코딩테스트_문제풀이전략_책.동적_프로그래밍.등굣길;
+import com.keencho.algorithm.programmers.랜덤.억억단을_외우자;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        var q = new 등굣길();
+        var q = new 억억단을_외우자();
 
-        var res = q.solution(10, 10,  new int[][] { { 2, 2 } });
+        var res = q.solution(8, new int[]{ 1, 3, 7 });
 
-        System.out.println(res);
+//        System.out.println(res);
     }
 
 }
