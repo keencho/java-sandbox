@@ -1,4 +1,4 @@
-package com.keencho.algorithm.programmers.자주_등장하는_자료구조.스택과_큐;
+package com.keencho.algorithm.programmers.코딩테스트_문제풀이전략_책.자주_등장하는_자료구조.스택과_큐;
 
 import java.util.ArrayList;
 
