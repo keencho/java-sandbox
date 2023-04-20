@@ -1,9 +1,12 @@
 package com.keencho.jooq;
 
+import com.keencho.jooq.model.tables.pojos.Author;
+import com.keencho.jooq.model.tables.pojos.AuthorBook;
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 import static com.keencho.jooq.model.Tables.AUTHOR;
 import static com.keencho.jooq.model.Tables.BOOK;
@@ -14,13 +17,13 @@ class JooqTestWithoutDAO extends JooqTestBase {
     @Autowired
     DSLContext dslContext;
 
-    static class AuthorBook {
+    static class Projection {
         String author;
         String title;
     }
 
     @Test
-    void fetchAuthorBookWithCustomProjection() {
+    void fetchIntoCustomClass() {
         var list = dslContext
                 .select(
                         BOOK.TITLE,
@@ -30,28 +33,34 @@ class JooqTestWithoutDAO extends JooqTestBase {
                 .leftJoin(AUTHOR).on(AUTHOR.ID.eq(AUTHOR_BOOK.AUTHOR_ID))
                 .leftJoin(BOOK).on(BOOK.ID.eq(AUTHOR_BOOK.BOOK_ID))
                 .where(AUTHOR.FIRST_NAME.eq("홍"))
-                .fetchInto(AuthorBook.class);
+                .fetchInto(Projection.class);
 
-        Assertions.assertTrue(list.stream().allMatch(item -> item.author.charAt(0) == '홍'));
+        Assertions.assertTrue(list.stream().allMatch(item -> StringUtils.hasText(item.title) && item.author.charAt(0) == '홍'));
     }
 
     @Test
-    void updateTest() {
+    void update() {
+        var condition = AUTHOR.ID.eq(1).or(AUTHOR.ID.eq(2));
         dslContext
                 .update(AUTHOR)
                 .set(AUTHOR.FIRST_NAME, "성")
-                .where(AUTHOR.ID.eq(2).or(AUTHOR.ID.eq(1)))
+                .where(condition)
                 .execute();
+
+        var list = dslContext.selectFrom(AUTHOR).where(condition).fetchInto(Author.class);
+
+        Assertions.assertTrue(list.stream().allMatch(item -> item.getFirstName().equals("성")));
     }
 
     @Test
-    void deleteTest() {
+    void delete() {
         dslContext.delete(AUTHOR).where(AUTHOR.ID.eq(1)).execute();
 
-        var list = dslContext.selectFrom(AUTHOR_BOOK).fetch();
+        var authorList = dslContext.selectFrom(AUTHOR).fetchInto(Author.class);
+        var authorBookList = dslContext.selectFrom(AUTHOR_BOOK).fetchInto(AuthorBook.class);
 
-        Assertions.assertTrue(list.stream().allMatch(item -> item.get(AUTHOR_BOOK.AUTHOR_ID) != 1));
-
+        Assertions.assertTrue(authorList.stream().noneMatch(item -> item.getId() == 1));
+        Assertions.assertTrue(authorBookList.stream().noneMatch(item -> item.getAuthorId() == 1));
     }
 
 }
