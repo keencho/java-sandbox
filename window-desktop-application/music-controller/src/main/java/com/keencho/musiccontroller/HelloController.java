@@ -29,18 +29,19 @@ public class HelloController {
 
             if (title.toUpperCase().contains("YouTube Music".toUpperCase())) {
 
-//                User32.INSTANCE.PostMessage(hwnd, WinUser.WM_KEYDOWN, );
+                User32.INSTANCE.ShowWindow(hwnd, 9);
 
-                User32.INSTANCE.ShowWindow(hwnd, 1);
+                User32.INSTANCE.PostMessage(hwnd, WinUser.WM_KEYDOWN, new WinDef.WPARAM(0x20), new WinDef.LPARAM(0));
+//                User32.INSTANCE.PostMessage(hwnd, WinUser.WM_KEYDOWN, new WinDef.WPARAM(0x20), new WinDef.LPARAM(1));
 
-                var input = new WinUser.INPUT();
-                input.type = new WinDef.DWORD(WinUser.INPUT.INPUT_KEYBOARD);
-                input.input.ki.wVk = new WinDef.WORD(KeyEvent.VK_SPACE);
-                input.input.ki.dwFlags = new WinDef.DWORD(WinUser.KEYBDINPUT.KEYEVENTF_EXTENDEDKEY);
-
-                var res = User32.INSTANCE.SendInput(new WinDef.DWORD(1), new WinUser.INPUT[] { input }, input.size());
-
-                System.out.println(res);
+//                var input = new WinUser.INPUT();
+//                input.type = new WinDef.DWORD(WinUser.INPUT.INPUT_KEYBOARD);
+//                input.input.ki.wVk = new WinDef.WORD(KeyEvent.VK_SPACE);
+//                input.input.ki.dwFlags = new WinDef.DWORD(WinUser.KEYBDINPUT.KEYEVENTF_EXTENDEDKEY);
+//
+//                var res = User32.INSTANCE.SendInput(new WinDef.DWORD(1), new WinUser.INPUT[] { input }, input.size());
+//
+//                System.out.println(res);
 
                 break;
             }
