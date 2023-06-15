@@ -1,37 +1,57 @@
 package com.keencho.musiccontroller;
 
+import com.sun.jna.Library;
 import com.sun.jna.Native;
-import com.sun.jna.platform.win32.User32;
-import com.sun.jna.platform.win32.WinDef;
-import com.sun.jna.platform.win32.WinUser;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-import java.awt.event.KeyEvent;
+import java.lang.foreign.Linker;
+import java.lang.foreign.MemorySegment;
+import java.lang.foreign.SymbolLookup;
+import java.util.Optional;
 
 public class HelloController {
+
+    public interface User32 extends Library {
+        User32 INSTANCE = Native.load("user32", User32.class);
+
+        int MessageBoxA(int hWnd, String lpText, String lpCaption, int uType);
+    }
+
     @FXML
     private Label welcomeText;
 
     @FXML
     protected void onHelloButtonClick() {
-        WinDef.HWND hwnd = null;
-        while ( true ) {
-            hwnd = User32.INSTANCE.FindWindowEx(null, hwnd, null, null);
+        Linker linker = Linker.nativeLinker();
 
-            if (hwnd == null) {
-                break;
-            }
+        SymbolLookup linkerLookup = linker.defaultLookup();
+        SymbolLookup systemLookup = SymbolLookup.loaderLookup();
 
-            var buffer = new char[1024];
-            User32.INSTANCE.GetWindowText(hwnd, buffer, buffer.length);
-            var title = Native.toString(buffer);
+        SymbolLookup symbolLookup = name -> systemLookup.lookup(name).or(() -> linkerLookup.lookup(name));
 
-            if (title.toUpperCase().contains("YouTube Music".toUpperCase())) {
+        Optional<MemorySegment> printfMemorySegment = symbolLookup.lookup("printf");
+    }
 
-                User32.INSTANCE.ShowWindow(hwnd, 9);
-
-                User32.INSTANCE.PostMessage(hwnd, WinUser.WM_KEYDOWN, new WinDef.WPARAM(0x20), new WinDef.LPARAM(0));
+//    @FXML
+//    protected void onHelloButtonClick() {
+//        WinDef.HWND hwnd = null;
+//        while ( true ) {
+//            hwnd = User32.INSTANCE.FindWindowEx(null, hwnd, null, null);
+//
+//            if (hwnd == null) {
+//                break;
+//            }
+//
+//            var buffer = new char[1024];
+//            User32.INSTANCE.GetWindowText(hwnd, buffer, buffer.length);
+//            var title = Native.toString(buffer);
+//
+//            if (title.toUpperCase().contains("YouTube Music".toUpperCase())) {
+//
+//                User32.INSTANCE.ShowWindow(hwnd, 9);
+//
+//                User32.INSTANCE.PostMessage(hwnd, WinUser.WM_KEYDOWN, new WinDef.WPARAM(0x20), new WinDef.LPARAM(0));
 //                User32.INSTANCE.PostMessage(hwnd, WinUser.WM_KEYDOWN, new WinDef.WPARAM(0x20), new WinDef.LPARAM(1));
 
 //                var input = new WinUser.INPUT();
@@ -43,10 +63,10 @@ public class HelloController {
 //
 //                System.out.println(res);
 
-                break;
-            }
-        }
-
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
+//                break;
+//            }
+//        }
+//
+//        welcomeText.setText("Welcome to JavaFX Application!");
+//    }
 }
